@@ -10,8 +10,21 @@ It runs no database, server or app. It is made of commands, skills and agents, a
 
 ```bash
 # in Claude Code
-/plugin marketplace add <path-or-git-url-of-this-repo>
-/plugin install audit-ready@audit-ready
+/plugin marketplace add seccomply-ai/audit-ready-grc
+/plugin install audit-ready@seccomply
+```
+
+The repository is private for now. Installing needs git access to `seccomply-ai/audit-ready-grc` (for example via `gh auth login`). Background auto-updates for a private marketplace also need a `GITHUB_TOKEN` with read access in your environment; otherwise, update manually with `/plugin marketplace update seccomply`.
+
+To offer the plugin automatically to everyone working in a project, add this to the project's `.claude/settings.json`:
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "seccomply": { "source": { "source": "github", "repo": "seccomply-ai/audit-ready-grc" } }
+  },
+  "enabledPlugins": { "audit-ready@seccomply": true }
+}
 ```
 
 [claude-grc-engineering](https://github.com/GRCEngClub/claude-grc-engineering) is optional. If its framework plugins (`soc2`, `iso27001`, `ind-dpdpa`) or inspectors (`aws-inspector`, `github-inspector`, ...) are installed, Audit Ready uses them, and it works the same without them.

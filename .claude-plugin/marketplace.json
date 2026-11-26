@@ -1,8 +1,8 @@
 {
-  "name": "audit-ready",
+  "name": "seccomply",
   "owner": {
     "name": "Seccomply",
-    "url": "https://github.com/seccomply"
+    "url": "https://github.com/seccomply-ai"
   },
   "metadata": {
     "description": "Audit Ready: your GRC assistant inside Claude Code. Scope it, collect it, audit it.",

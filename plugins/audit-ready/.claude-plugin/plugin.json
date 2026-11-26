@@ -5,7 +5,8 @@
   "author": {
     "name": "Seccomply"
   },
-  "repository": "https://github.com/seccomply/audit-ready-plugin",
+  "homepage": "https://github.com/seccomply-ai/audit-ready-grc",
+  "repository": "https://github.com/seccomply-ai/audit-ready-grc",
   "license": "MIT",
   "keywords": [
     "grc",
