@@ -1,0 +1,14 @@
+# Audit Ready plugin
+
+Audit Ready is a GRC assistant inside Claude Code for SOC 2, ISO 27001:2022 and India's DPDP Act 2023. Scope it, collect it, audit it.
+
+- **Scoping.** `/audit-ready:scope <url>` reads the company website, asks only what the site can't show, recommends frameworks, and drafts a Statement of Applicability and a scoping memo.
+- **Evidence collection.**
+  - `/audit-ready:evidence-plan` turns the scope into a list of evidence to gather.
+  - `/audit-ready:collect` runs read-only gh, aws, gam, gcloud and az commands after you approve them, then hashes and indexes what they return.
+  - `/audit-ready:request` drafts the requests to evidence owners.
+  - `/audit-ready:inbox` files what owners send back.
+- **Internal audit.** `/audit-ready:audit <function>` tests evidence, takes samples, and proposes verdicts and rated findings. It writes the internal audit report after you approve.
+- **Status.** `/audit-ready:status` shows readiness per framework, computed from the files.
+
+Start with `/audit-ready:start`. Everything the plugin produces is plain Markdown or CSV in `compliance/`. See the repository README for details, safety rules and examples.

@@ -1,0 +1,94 @@
+framework,req_id,title,applicable,mandatory,reason,approved_by,approved_at
+soc2,CC1.1,Integrity and ethical values,yes,yes,mandatory,user,2026-11-20
+soc2,CC1.2,Board oversight,yes,yes,mandatory,user,2026-11-20
+soc2,CC1.3,"Structure, authority and responsibility",yes,yes,mandatory,user,2026-11-20
+soc2,CC1.4,Commitment to competence,yes,yes,mandatory,user,2026-11-20
+soc2,CC1.5,Accountability,yes,yes,mandatory,user,2026-11-20
+soc2,CC2.1,Quality information,yes,yes,mandatory,user,2026-11-20
+soc2,CC2.2,Internal communication,yes,yes,mandatory,user,2026-11-20
+soc2,CC2.3,External communication,yes,yes,mandatory,user,2026-11-20
+soc2,CC3.1,Objectives for risk,yes,yes,mandatory,user,2026-11-20
+soc2,CC3.2,Risk identification and analysis,yes,yes,mandatory,user,2026-11-20
+soc2,CC3.3,Fraud risk,yes,yes,mandatory,user,2026-11-20
+soc2,CC3.4,Changes that affect internal control,yes,yes,mandatory,user,2026-11-20
+soc2,CC4.1,Ongoing and separate evaluations,yes,yes,mandatory,user,2026-11-20
+soc2,CC4.2,Communicating deficiencies,yes,yes,mandatory,user,2026-11-20
+soc2,CC5.1,Control activities to mitigate risk,yes,yes,mandatory,user,2026-11-20
+soc2,CC5.2,Technology general controls,yes,yes,mandatory,user,2026-11-20
+soc2,CC5.3,Policies and procedures,yes,yes,mandatory,user,2026-11-20
+soc2,CC6.1,Logical access security,yes,yes,mandatory,user,2026-11-20
+soc2,CC6.2,User registration and authorisation,yes,yes,mandatory,user,2026-11-20
+soc2,CC6.3,Role-based access and changes,yes,yes,mandatory,user,2026-11-20
+soc2,CC6.4,Physical access,inherited,yes,AWS SOC 2 Type II report: physical data centre security (profile.md: Cloud); office is co-working with no servers,user,2026-11-20
+soc2,CC6.5,Asset disposal,yes,yes,mandatory,user,2026-11-20
+soc2,CC6.6,Protection against external threats,yes,yes,mandatory,user,2026-11-20
+soc2,CC6.7,Data transmission and movement,yes,yes,mandatory,user,2026-11-20
+soc2,CC6.8,Malicious software prevention,yes,yes,mandatory,user,2026-11-20
+soc2,CC7.1,Configuration and vulnerability monitoring,yes,yes,mandatory,user,2026-11-20
+soc2,CC7.2,Anomaly monitoring,yes,yes,mandatory,user,2026-11-20
+soc2,CC7.3,Security event evaluation,yes,yes,mandatory,user,2026-11-20
+soc2,CC7.4,Incident response,yes,yes,mandatory,user,2026-11-20
+soc2,CC7.5,Incident recovery,yes,yes,mandatory,user,2026-11-20
+soc2,CC8.1,Change management,yes,yes,mandatory,user,2026-11-20
+soc2,CC9.1,Business disruption risk,yes,yes,mandatory,user,2026-11-20
+soc2,CC9.2,Vendor and partner risk,yes,yes,mandatory,user,2026-11-20
+soc2,A1.1,Capacity management,yes,no,Availability in scope: 99.9% uptime SLA on pricing page (profile.md: Pricing),user,2026-11-20
+soc2,A1.2,Environmental protections and backups,yes,no,Availability in scope: 99.9% uptime SLA on pricing page (profile.md: Pricing),user,2026-11-20
+soc2,A1.3,Recovery testing,yes,no,Availability in scope: 99.9% uptime SLA on pricing page (profile.md: Pricing),user,2026-11-20
+soc2,C1.1,Identify and maintain confidential information,no,no,Confidentiality not selected for first report; customer data protected under Security (scope.md: SOC 2 categories),user,2026-11-20
+soc2,C1.2,Dispose of confidential information,no,no,Confidentiality not selected for first report; customer data protected under Security (scope.md: SOC 2 categories),user,2026-11-20
+soc2,PI1.1,Processing specifications,no,no,Processing Integrity not selected: product schedules shifts and does not compute payroll or payments (profile.md: Product),user,2026-11-20
+soc2,PI1.2,Input controls,no,no,Processing Integrity not selected: product schedules shifts and does not compute payroll or payments (profile.md: Product),user,2026-11-20
+soc2,PI1.3,Processing controls,no,no,Processing Integrity not selected: product schedules shifts and does not compute payroll or payments (profile.md: Product),user,2026-11-20
+soc2,PI1.4,Output controls,no,no,Processing Integrity not selected: product schedules shifts and does not compute payroll or payments (profile.md: Product),user,2026-11-20
+soc2,PI1.5,Storage of inputs and outputs,no,no,Processing Integrity not selected: product schedules shifts and does not compute payroll or payments (profile.md: Product),user,2026-11-20
+soc2,P1.1,Privacy notice,no,no,Privacy category not selected: B2B processor role; privacy duties covered by DPDP scope (scope.md),user,2026-11-20
+soc2,P2.1,Choice and consent,no,no,Privacy category not selected: B2B processor role; privacy duties covered by DPDP scope (scope.md),user,2026-11-20
+soc2,P3.1,Collection limited to purpose,no,no,Privacy category not selected: B2B processor role; privacy duties covered by DPDP scope (scope.md),user,2026-11-20
+soc2,P3.2,Explicit consent for collection,no,no,Privacy category not selected: B2B processor role; privacy duties covered by DPDP scope (scope.md),user,2026-11-20
+soc2,P4.1,Use limited to purpose,no,no,Privacy category not selected: B2B processor role; privacy duties covered by DPDP scope (scope.md),user,2026-11-20
+soc2,P4.2,Retention,no,no,Privacy category not selected: B2B processor role; privacy duties covered by DPDP scope (scope.md),user,2026-11-20
+soc2,P4.3,Disposal,no,no,Privacy category not selected: B2B processor role; privacy duties covered by DPDP scope (scope.md),user,2026-11-20
+soc2,P5.1,Access by data subjects,no,no,Privacy category not selected: B2B processor role; privacy duties covered by DPDP scope (scope.md),user,2026-11-20
+soc2,P5.2,Correction by data subjects,no,no,Privacy category not selected: B2B processor role; privacy duties covered by DPDP scope (scope.md),user,2026-11-20
+soc2,P6.1,Disclosure to third parties,no,no,Privacy category not selected: B2B processor role; privacy duties covered by DPDP scope (scope.md),user,2026-11-20
+soc2,P6.2,Record of authorised disclosures,no,no,Privacy category not selected: B2B processor role; privacy duties covered by DPDP scope (scope.md),user,2026-11-20
+soc2,P6.3,Record of unauthorised disclosures,no,no,Privacy category not selected: B2B processor role; privacy duties covered by DPDP scope (scope.md),user,2026-11-20
+soc2,P6.4,Third-party commitments,no,no,Privacy category not selected: B2B processor role; privacy duties covered by DPDP scope (scope.md),user,2026-11-20
+soc2,P6.5,Third-party breach notification,no,no,Privacy category not selected: B2B processor role; privacy duties covered by DPDP scope (scope.md),user,2026-11-20
+soc2,P6.6,Breach notification to data subjects,no,no,Privacy category not selected: B2B processor role; privacy duties covered by DPDP scope (scope.md),user,2026-11-20
+soc2,P6.7,Accounting of disclosures,no,no,Privacy category not selected: B2B processor role; privacy duties covered by DPDP scope (scope.md),user,2026-11-20
+soc2,P7.1,Quality of personal information,no,no,Privacy category not selected: B2B processor role; privacy duties covered by DPDP scope (scope.md),user,2026-11-20
+soc2,P8.1,Privacy inquiries and complaints,no,no,Privacy category not selected: B2B processor role; privacy duties covered by DPDP scope (scope.md),user,2026-11-20
+dpdp,DPDP-4,Grounds for processing,yes,yes,mandatory,user,2026-11-20
+dpdp,DPDP-5,Notice,yes,yes,mandatory,user,2026-11-20
+dpdp,DPDP-6,Consent,yes,yes,mandatory,user,2026-11-20
+dpdp,DPDP-6-CM,Consent managers,no,no,No consent manager used (profile.md: Data handled),user,2026-11-20
+dpdp,DPDP-7,Certain legitimate uses,yes,no,Own employee data processed under employment legitimate use (profile.md: Data handled),user,2026-11-20
+dpdp,DPDP-8-1,Accountability of the data fiduciary,yes,yes,mandatory,user,2026-11-20
+dpdp,DPDP-8-2,Engaging data processors,yes,yes,mandatory,user,2026-11-20
+dpdp,DPDP-8-3,Accuracy and completeness,yes,no,Personal data used for scheduling decisions (profile.md: Product),user,2026-11-20
+dpdp,DPDP-8-4,Technical and organisational measures,yes,yes,mandatory,user,2026-11-20
+dpdp,DPDP-8-5,Reasonable security safeguards,yes,yes,mandatory,user,2026-11-20
+dpdp,DPDP-8-6,Personal data breach intimation,yes,yes,mandatory,user,2026-11-20
+dpdp,DPDP-8-7,Erasure and retention,yes,yes,mandatory,user,2026-11-20
+dpdp,DPDP-8-9,Published contact,yes,yes,mandatory,user,2026-11-20
+dpdp,DPDP-8-10,Grievance redressal,yes,yes,mandatory,user,2026-11-20
+dpdp,DPDP-9,Children and persons with disability,no,no,"No children's data: users are employees of business customers, 18+ (profile.md: Customers)",user,2026-11-20
+dpdp,DPDP-10,Significant data fiduciary obligations,no,no,"Not notified as a significant data fiduciary (user, 2026-11-19)",user,2026-11-20
+dpdp,DPDP-11,Right to access information,yes,yes,mandatory,user,2026-11-20
+dpdp,DPDP-12,Right to correction and erasure,yes,yes,mandatory,user,2026-11-20
+dpdp,DPDP-13,Right of grievance redressal,yes,yes,mandatory,user,2026-11-20
+dpdp,DPDP-14,Right to nominate,yes,yes,mandatory,user,2026-11-20
+dpdp,DPDP-16,Transfer outside India,yes,no,US-based support subprocessor can access ticket data (profile.md: Subprocessors),user,2026-11-20
+dpdp,DPDP-17,Exemptions,no,no,No exemption relied on,user,2026-11-20
+dpdp,DPDP-R3,Notice contents and form,yes,yes,mandatory,user,2026-11-20
+dpdp,DPDP-R4,Consent manager registration and duties,no,no,Not a consent manager and does not use one,user,2026-11-20
+dpdp,DPDP-R6,Reasonable security safeguards (minimum),yes,yes,mandatory,user,2026-11-20
+dpdp,DPDP-R7,Breach intimation timelines,yes,yes,mandatory,user,2026-11-20
+dpdp,DPDP-R8,Erasure timelines for specified fiduciaries,no,no,"Not in a specified class (B2B SaaS, not e-commerce, gaming or social media)",user,2026-11-20
+dpdp,DPDP-R9,Contact information of DPO or responsible person,yes,yes,mandatory,user,2026-11-20
+dpdp,DPDP-R10,Verifiable consent for children,no,no,No children's data (see DPDP-9),user,2026-11-20
+dpdp,DPDP-R13,Additional obligations of significant data fiduciaries,no,no,"Not notified as a significant data fiduciary (user, 2026-11-19)",user,2026-11-20
+dpdp,DPDP-R14,Exercising rights and response timelines,yes,yes,mandatory,user,2026-11-20
+dpdp,DPDP-R15,Cross-border transfer requirements,yes,no,US-based support subprocessor can access ticket data (profile.md: Subprocessors),user,2026-11-20

@@ -1,0 +1,7 @@
+{
+  "_note": "FICTIONAL SAMPLE DATA",
+  "login": "acme-shift",
+  "two_factor_requirement_enabled": true,
+  "default_repository_permission": "read",
+  "members_can_create_public_repositories": false
+}

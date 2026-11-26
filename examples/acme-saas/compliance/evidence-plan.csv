@@ -1,0 +1,12 @@
+item_id,item,requirements,method,tool,command_ref,owner,period,due,status
+EV-001,GitHub org settings incl. 2FA requirement,soc2:CC6.1;dpdp:DPDP-R6,cli,gh,GH-01,CTO,point-in-time,2026-12-04,collected
+EV-002,Google Workspace users with 2SV enforcement,soc2:CC6.1;dpdp:DPDP-R6,cli,gam,GWS-02,IT lead,point-in-time,2026-12-04,collected
+EV-003,Branch protection on acme-shift/api main,soc2:CC8.1,cli,gh,GH-06,CTO,point-in-time,2026-12-04,collected
+EV-004,Merged PRs to acme-shift/api main in the period,soc2:CC8.1,cli,gh,GH-08,CTO,2026-06-01 to 2026-11-30,2026-12-04,planned
+EV-005,Keka export of leavers in the period,soc2:CC6.2;soc2:CC6.3,owner,Keka,,HR,2026-06-01 to 2026-11-30,2026-12-04,collected
+EV-006,AWS credential report (production account),soc2:CC6.1;soc2:CC6.2;soc2:CC6.3,cli,aws,AWS-04,CTO,point-in-time,2026-12-04,planned
+EV-007,CloudTrail trails and status (production account),soc2:CC7.2;dpdp:DPDP-R6,cli,aws,AWS-06,CTO,point-in-time,2026-12-04,planned
+EV-008,Approved information security policy set with review dates,soc2:CC5.3;soc2:CC1.1,owner,document,,CEO,point-in-time,2026-12-04,requested
+EV-009,Risk assessment for the period,soc2:CC3.1;soc2:CC3.2;soc2:CC3.3;soc2:CC3.4,owner,document,,CEO,2026-06-01 to 2026-11-30,2026-12-04,requested
+EV-010,AWS SOC 2 Type II report and CUEC review,soc2:CC6.4,owner,document,,CTO,2026-06-01 to 2026-11-30,2026-12-04,requested
+EV-011,Breach response procedure with 72-hour Board report step,dpdp:DPDP-8-6;dpdp:DPDP-R7;soc2:CC7.4,owner,document,,Legal,point-in-time,2026-12-04,requested

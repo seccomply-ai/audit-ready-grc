@@ -1,0 +1,21 @@
+{
+  "name": "audit-ready",
+  "description": "Audit Ready - GRC assistant inside Claude Code: business scoping, framework applicability, read-only evidence collection and internal audit for SOC 2, ISO 27001 and India DPDP. Everything it produces is a plain file in compliance/.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Seccomply"
+  },
+  "repository": "https://github.com/seccomply/audit-ready-plugin",
+  "license": "MIT",
+  "keywords": [
+    "grc",
+    "compliance",
+    "soc2",
+    "iso27001",
+    "dpdp",
+    "audit",
+    "evidence",
+    "scoping",
+    "internal-audit"
+  ]
+}

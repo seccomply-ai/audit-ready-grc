@@ -1,0 +1,95 @@
+---
+name: evidence-playbooks
+description: Read-only evidence collection playbooks for gh (GitHub), aws, gam (Google Workspace), gcloud (GCP) and az (Azure) - the exact get/list/describe commands, which SOC 2 / ISO 27001 / DPDP requirements each artifact supports, file naming, plus owner request templates for manual evidence. Use when building an evidence plan, running /audit-ready:collect, or drafting /audit-ready:request messages.
+allowed-tools: Read, Glob, Grep, Write, Edit, Bash
+---
+
+# Evidence playbooks
+
+| Playbook | CLI | Detect (signed in?) | File |
+|---|---|---|---|
+| GitHub | `gh` | `gh auth status` | `playbooks/gh.md` |
+| AWS | `aws` | `aws sts get-caller-identity` | `playbooks/aws.md` |
+| Google Workspace | `gam` (GAM7 / GAMADV-XTD3) | `gam info domain` | `playbooks/gam.md` |
+| Google Cloud | `gcloud` | `gcloud auth list --filter=status:ACTIVE --format="value(account)"` | `playbooks/gcloud.md` |
+| Azure | `az` | `az account show` | `playbooks/az.md` |
+
+Find out whether a CLI is installed with `command -v <cli>` (bash) or `Get-Command <cli>` (PowerShell) before running its detect command. A CLI that is missing or not signed in is not an error. Its items become owner requests or wait until the user signs in. Never ask for credentials in chat. Credentials come only from the user's existing CLI sign-ins.
+
+## Read-only allowlist (hard rule)
+
+A command may run only if all of these are true:
+
+1. It appears in a playbook, or it is a variant of a playbook command that only changes ids, regions, `--query`, `--format`, `--output`, `--jq`, pagination or filters.
+2. Its verb is read-only:
+   - aws: `get-*`, `list-*`, `describe-*`, plus the documented exception `iam generate-credential-report`, which only builds a report and changes no configuration;
+   - gcloud: `list`, `describe`, `get-iam-policy`;
+   - az: `show`, `list`, and `az rest --method get`;
+   - gh: `gh api` with no `-X`, `--method`, `-f`, `-F` or `--input` flags (any of these can turn a request into a write), plus `gh repo list` and `gh auth status`;
+   - gam: `info`, `print`, `show`, `report`.
+3. It contains no shell redirection into anything other than the target evidence file, no `;`, `&&` or pipes into commands other than `jq`, `base64 -d` or `head`, and no `$( )` that runs non-allowlisted commands.
+
+If anything the user asks for falls outside this list, say it is outside Audit Ready's read-only scope, and don't run it.
+
+## Running a playbook
+
+1. Read `compliance/applicability.csv` and `compliance/evidence-plan.csv`. Run only items whose `method=cli` and `tool` match, and which support at least one applicable requirement.
+2. Fill in placeholders (`<org>`, `<repo>`, `<account>`, `<project>`, `<subscription>`, `<region>`) from `profile.md`, or ask the user. Expand loops, such as per-region or per-repo calls, into the concrete list.
+3. **Show the full list of commands** in a numbered code block, grouped by plan item. Wait for explicit approval. The user may approve all, pick a subset, or edit ids.
+4. Run each approved command and write its stdout to a temp file in `compliance/evidence/_staging/`. Don't print large outputs into the conversation. Read only the head, counts, or `jq` summaries.
+5. If a command fails because of permissions, a missing feature or the plan tier, save stderr as `<name>.error.txt` in staging. It is not evidence. Set the plan item status to `planned` with a note, and tell the user what role or permission is missing.
+6. For each successful output:
+   - redact (see the grc-assistant skill);
+   - move it to `compliance/evidence/<first-requirement-folder>/<YYYY-MM-DD>_<tool>_<item-slug>.<ext>`;
+   - hash it;
+   - append an `index.csv` row with:
+     - `requirements`: every applicable requirement the item supports, including SCF links the user accepted (see "Requirement keys and SCF tags");
+     - `source`: `<tool> <account/org/project>`;
+     - `command`: the exact command line;
+     - `period`: `point-in-time` or the date range queried;
+     - `collected_at`: UTC timestamp;
+     - `sha256`;
+     - `redacted`.
+7. Set the plan item `status=collected`. Remove `_staging/` when it is empty.
+
+File extensions: `.json` for JSON output, `.csv` for CSV (gam, credential report), `.txt` otherwise. Always prefer `--output json`, `--format=json` or the `--json` flags so the auditor gets structured data.
+
+## Large outputs
+
+Never read a full large export into context. Use counts and samples:
+
+```bash
+jq 'length' file.json
+jq '.[0:5]' file.json
+jq '[.[] | select(.isEnforcedIn2Sv == false)] | length' file.json
+wc -l file.csv
+head -n 6 file.csv
+```
+
+## Requirement keys and SCF tags
+
+Each playbook row has two mapping columns:
+
+- **`Requirements`** holds hand-mapped keys for the curated frameworks, such as `soc2:CC6.1;iso27001:A.8.5;dpdp:DPDP-R6`.
+- **`SCF`** holds the SCF control ids the artifact evidences, such as `IAC-06;IAC-02`. These link the row to **any** framework, including SCF-backed ones like PCI DSS, NIST 800-53 or DORA.
+
+When filing:
+
+1. Keep the `Requirements` keys that are applicable (or inherited) in `applicability.csv`.
+2. For every other in-scope framework, find the applicable requirements whose `scf_ids` (in the curated or generated catalog) contain any of the row's SCF ids. Propose them as "also supports (via SCF)".
+3. Show the proposed additions per file and let the user accept, trim or reject them. Write only the accepted keys into `index.csv`.
+
+SCF links are broad hints, not proof (see `framework-reference/scf.md`). Prefer fewer, stronger links. When a requirement links to more than 3 artifacts through SCF only, offer just the 3 most specific ones, meaning those whose SCF ids share the most with the requirement's `scf_ids`.
+
+## Manual evidence
+
+Items that no CLI can collect (policies, HR records, training, board minutes, vendor reports, screenshots of settings in tools without a CLI) become `method=owner` plan items. Draft requests with `templates/owner-request.md` through `/audit-ready:request`.
+
+## Integration (optional)
+
+If claude-grc-engineering inspectors are installed (`aws-inspector`, `github-inspector`, `gcp-inspector`, `azure-inspector`, `okta-inspector`) and their cached Findings exist under `~/.cache/claude-grc/findings/<source>/`, `/audit-ready:collect import` can file the newest run file per source as evidence:
+- method `import`;
+- source `<connector> run <run_id>`;
+- command `imported from ~/.cache/claude-grc/findings/...`.
+
+Copy it unchanged, then redact, hash and index it. Map its `evaluations[].control_id` values to requirements only where they match catalog ids.

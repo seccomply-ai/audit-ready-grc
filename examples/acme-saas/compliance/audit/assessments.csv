@@ -1,0 +1,6 @@
+evidence,requirement,verdict,gaps,fix,reviewer,date,approved
+soc2_CC6.1/2026-11-24_gh_org-settings.json,soc2:CC6.1,satisfies,,,audit-ready,2026-11-26,yes
+soc2_CC6.1/2026-11-24_gam_users-2sv.csv,soc2:CC6.1,partial,2 of 26 active users not enforced for 2SV (isEnforcedIn2Sv=False),Enforce 2SV for all OUs; re-collect GWS-02,audit-ready,2026-11-26,yes
+soc2_CC8.1/2026-11-24_gh_branch-protection_api.json,soc2:CC8.1,partial,Required review is on but enforce_admins is disabled so admins can bypass; PR sample not yet tested (EV-004 planned),Enable enforce_admins; collect GH-08 and GH-09 for sampled PRs,audit-ready,2026-11-26,yes
+soc2_CC6.2/2026-11-25_hr_leavers-h2-2026.csv,soc2:CC6.2,partial,Leaver population filed but account removal dates not evidenced for 3 of 3 leavers,Collect Workspace admin audit log (GWS-07) showing suspension dates,audit-ready,2026-11-26,yes
+(none),soc2:CC3.2,fails,no evidence filed; EV-009 requested,Run and document a risk assessment for the period,audit-ready,2026-11-26,yes

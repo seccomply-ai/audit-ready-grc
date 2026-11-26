@@ -1,0 +1,11 @@
+# Test runs of the plugin at the repo root must never be committed.
+# (examples/*/compliance/ is fictional sample data and IS committed.)
+/compliance/
+/scratch/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+node_modules/

@@ -1,0 +1,25 @@
+{
+  // Same rule set as claude-grc-engineering
+  "config": {
+    "default": true,
+    "MD013": false,
+    "MD024": false,
+    "MD029": false,
+    "MD031": false,
+    "MD032": false,
+    "MD033": false,
+    "MD034": false,
+    "MD036": false,
+    "MD040": false,
+    "MD041": false,
+    "MD046": false,
+    "MD047": false,
+    // Newer rule (markdownlint >= 0.38) not in the base repo's pinned version; table alignment is cosmetic
+    "MD060": false
+  },
+  "globs": [
+    "**/*.md",
+    "!node_modules/**",
+    "!.claude/**"
+  ]
+}
