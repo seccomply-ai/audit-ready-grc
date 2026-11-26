@@ -20,7 +20,7 @@ For each evidence × requirement pair:
 
 1. **Authenticity.** Recompute the sha256:
    - `sha256sum <file>`, or `shasum -a 256 <file>`, or PowerShell `Get-FileHash`.
-   - Compare the result with the index. A mismatch means `fails` with the gap `hash mismatch`.
+   - Compare the result with the index. A mismatch means `fails` with the gap `evidence altered after collection (hash mismatch)`.
    - Bash is allowed only for hashing and for read-only inspection: `jq`, `head`, `wc`, `grep`. Never modify, move or delete files.
 2. **Read the file sparingly.** For JSON, use `jq` for counts and the key fields. For CSV, read the header plus counts with `grep -c`. For PDFs and images, use Read. Never paste whole exports into your answer.
 3. **Apply the rubric checks:**
@@ -43,7 +43,7 @@ Return only a JSON array, with no prose before or after it:
 ```json
 [
   {
-    "evidence": "CC6.1/2026-11-26_gam_users-2sv.csv",
+    "evidence": "soc2_CC6.1/2026-11-26_gam_users-2sv.csv",
     "requirement": "soc2:CC6.1",
     "verdict": "partial",
     "gaps": "3 of 41 active users not enforced for 2SV",

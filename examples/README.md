@@ -19,7 +19,7 @@ claude
 > /audit-ready:status
 ```
 
-The expected status shows SOC 2 readiness at 6% (1 satisfied, 2 partial, 36 applicable) and DPDP at 0%. It lists 3 open findings (1 major) and 4 requested owner items.
+The expected status shows SOC 2 readiness at 4% (0 satisfied, 3 partial, 36 applicable; CC6.1 is partial because the worst verdict counts) and DPDP at 0%. It lists 3 open findings (1 major) and 4 requested owner items.
 
 To check evidence integrity by hand:
 

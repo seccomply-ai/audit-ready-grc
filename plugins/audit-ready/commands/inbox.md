@@ -38,6 +38,7 @@ None. If `$ARGUMENTS` is non-empty, ignore it and say so.
    - Move it to `compliance/evidence/<first-req-folder>/<YYYY-MM-DD>_<owner-slug>_<item-slug>.<ext>`. Keep the original extension, and never edit the content.
    - The `requirements` come from the plan item. If other in-scope frameworks share its SCF ids, propose "also supports (via SCF)" keys, and let the user accept or trim them.
    - Compute its sha256 and append it to `index.csv`:
+     - `type`: classify the file as `policy`, `procedure`, `record`, `report`, `screenshot`, `population`, `config`, `log` or `other` (see grc-assistant), and confirm it with the user in the step 5 table;
      - `source`: `owner:<owner>`;
      - `command`: `manual upload (original name: <name>)`;
      - `period`: the period it covers;

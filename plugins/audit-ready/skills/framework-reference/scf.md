@@ -2,7 +2,7 @@
 
 Audit Ready ships curated catalogs for 12 frameworks (`tier=curated` in `frameworks.csv`). Every other framework that the Secure Controls Framework (SCF) maps (`tier=scf`, 240 of them) is built on demand from the SCF crosswalks. claude-grc-engineering uses the same crosswalks.
 
-- **Source:** `https://grcengclub.github.io/scf-api/api/` (SCF version in the cache path, currently `2026.1`).
+- **Source:** SCF data as republished by the GRC Engineering Club's **community API mirror** at `https://grcengclub.github.io/scf-api/api/`. This is a third-party mirror, not an official release of the Secure Controls Framework Council (`securecontrolsframework.com`). Say so when a user asks where the data comes from, and cite the SCF version from the mirror's `summary.json` (`scf_version`, for example `2026.1`).
 - **Licence:** SCF data is CC BY-ND 4.0. Audit Ready never ships SCF text. It fetches at run time into the user's own cache, and writes generated catalogs only into the user's `compliance/catalogs/` folder, with attribution. Do not paste SCF descriptions into committed docs.
 - **What you get:**
   - real requirement ids from the crosswalk (`framework_to_scf`);
@@ -32,16 +32,38 @@ The cache is shared with claude-grc-engineering:
 ~/.cache/claude-grc/scf/<version>/api/crosswalks/<scf_framework_id>.json
 ```
 
-If a file is missing, show the user the command and fetch it after they approve. It's a read-only download of public data:
+**Check the version first.** Don't assume `2026.1`:
+1. Fetch `summary.json` and read `scf_version`.
+2. Use that version as `<version>` in every path below.
+3. If a cache for an older version exists, say that the mirror has moved on. New crosswalks go into the new version folder. Curated `scf_ids` were built against the version named in `CHANGELOG.md`; if the versions differ, tell the user and suggest that the maintainer run `tools/build_scf_data.py`.
+
+If a file is missing, show the user the command and fetch it after they approve. It's a read-only download of public data.
+
+Bash (Linux, macOS, Git Bash):
 
 ```bash
-B=https://grcengclub.github.io/scf-api/api; C=~/.cache/claude-grc/scf/2026.1/api
+B=https://grcengclub.github.io/scf-api/api
+V=$(curl -sSf "$B/summary.json" | python -c "import json,sys; print(json.load(sys.stdin)['scf_version'])")
+C="$HOME/.cache/claude-grc/scf/$V/api"
 mkdir -p "$C/crosswalks"
+curl -sSf "$B/summary.json" -o "$C/summary.json"
 curl -sSf "$B/controls.json" -o "$C/controls.json"
 curl -sSf "$B/crosswalks/<scf_framework_id>.json" -o "$C/crosswalks/<scf_framework_id>.json"
 ```
 
-On PowerShell, use `Invoke-WebRequest -Uri ... -OutFile ...`.
+PowerShell (Windows):
+
+```powershell
+$B = "https://grcengclub.github.io/scf-api/api"
+$V = (Invoke-RestMethod "$B/summary.json").scf_version
+$C = Join-Path $HOME ".cache/claude-grc/scf/$V/api"
+New-Item -ItemType Directory -Force (Join-Path $C "crosswalks") | Out-Null
+Invoke-WebRequest "$B/summary.json" -OutFile (Join-Path $C "summary.json")
+Invoke-WebRequest "$B/controls.json" -OutFile (Join-Path $C "controls.json")
+Invoke-WebRequest "$B/crosswalks/<scf_framework_id>.json" -OutFile (Join-Path $C "crosswalks/<scf_framework_id>.json")
+```
+
+Use `$HOME` or `Join-Path $HOME ...`, never `~`, in arguments to native programs. PowerShell doesn't expand `~` for them.
 
 **Offline:** if the API can't be reached and nothing is cached, say so and offer only the curated frameworks. Never guess requirement ids.
 
@@ -59,7 +81,7 @@ Run this read-only command, standard-library Python only, after showing it to th
 
 ```bash
 mkdir -p compliance/catalogs
-python3 -I - ~/.cache/claude-grc/scf/2026.1/api <scf_framework_id> <key> compliance/catalogs/<key>.csv rollup <<'PY'
+python -I - "$HOME/.cache/claude-grc/scf/<version>/api" <scf_framework_id> <key> compliance/catalogs/<key>.csv rollup <<'PY'
 import csv, json, re, sys
 api, fid, key, out, mode = sys.argv[1:6]
 xw = json.load(open(f"{api}/crosswalks/{fid}.json", encoding="utf-8"))["framework_to_scf"]["mappings"]
@@ -94,7 +116,17 @@ print(out, len(groups), "rows")
 PY
 ```
 
-On Windows PowerShell, put the program in a single-quoted here-string and pipe it: `@'...'@ | python -I - <args>`.
+Find the interpreter first: try `python --version`, then `python3 --version`, then `py -3 --version`, and use the first that reports Python 3. On macOS and some Linux systems only `python3` exists.
+
+On Windows PowerShell, put the same program in a single-quoted here-string and pipe it. The closing `'@` must start at column 0:
+
+```powershell
+New-Item -ItemType Directory -Force compliance/catalogs | Out-Null
+$api = Join-Path $HOME ".cache/claude-grc/scf/<version>/api"
+@'
+<the same program as above>
+'@ | python -I - $api <scf_framework_id> <key> compliance/catalogs/<key>.csv rollup
+```
 
 The output has the same columns as the curated catalogs plus `scf_ids`:
 
@@ -103,7 +135,7 @@ The output has the same columns as the curated catalogs plus `scf_ids`:
 - `typical_evidence`: SCF evidence-request ids (ERL, `E-XXX-nn`).
 - `category`: the SCF family name.
 
-Write the SCF version and the date into `scope.md`: "SCF-backed catalog: <display_name>, SCF crosswalk <version>, generated <date>, <n> rows (<mode>)".
+Write the SCF version (from `summary.json`, not assumed) and the date into `scope.md`, naming the source as the GRC Engineering Club SCF API mirror:: "SCF-backed catalog: <display_name>, SCF crosswalk <version>, generated <date>, <n> rows (<mode>)".
 
 ## 4. Applicability for SCF-backed rows
 

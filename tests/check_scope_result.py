@@ -65,7 +65,10 @@ def main():
         if r["mandatory"] == "yes" and r["applicable"] == "no":
             reason = r["reason"].lower()
             # mandatory rows may only be 'no' when the whole entity is outside direct scope (framework-specific rules)
-            if not any(k in reason for k in ("not a financial entity", "processor", "supplier", "vendor", "not a covered", "saq")):
+            if reason.startswith("mandatory (entity:") or reason.startswith("mandatory (contract:"):
+                failed += 1
+                lines.append(f"  FAIL {r['framework']}:{r['req_id']}: entity-locked row set to 'no'")
+            elif not any(k in reason for k in ("not a financial entity", "processor", "supplier", "vendor", "not a covered", "saq")):
                 failed += 1
                 lines.append(f"  FAIL {r['framework']}:{r['req_id']}: mandatory row set to 'no' without an entity-scope reason")
         if r["applicable"] in ("no", "inherited") and not r["reason"].strip():

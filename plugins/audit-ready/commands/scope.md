@@ -76,6 +76,7 @@ For each chosen framework with `tier=scf`, follow `framework-reference/scf.md`:
 For each chosen framework, read its catalog: shipped `catalogs/<key>.csv` for curated frameworks, or `compliance/catalogs/<key>.csv` for SCF-backed ones. Propose one `applicability.csv` row per requirement. For SCF-backed rows there are no mandatory flags: propose `yes`, and use `no` only with a concrete profile reason.
 
 - **Mandatory rows:** `applicable=yes`, reason `mandatory`, locked. If the user asks to exclude one, refuse and explain.
+- **Entity-derived locks:** apply "Entity-derived locks" in framework-reference, for PCI DSS (SAQ type), DORA, RBI, SEBI CSCRF, and the conditional HIPAA, NIS2 and CERT-In rows. Write the locked rows with `mandatory=yes` and reason `mandatory (entity: <type>)` or `mandatory (contract: <customer>)`. If the entity answer is unknown, lock nothing and keep the question open.
 - **Inherited rows:** name the vendor (for example, "AWS SOC 2 Type II report; physical data centre security").
 - **`no` rows:** give a concrete reason citing a profile fact.
 - **Unknowns:** default to `yes`, plus an open question.

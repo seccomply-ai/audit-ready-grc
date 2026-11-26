@@ -30,14 +30,16 @@ FR = os.path.join(SK, "framework-reference")
 HEADERS = {
     "applicability.csv": "framework,req_id,title,applicable,mandatory,reason,approved_by,approved_at",
     "evidence-plan.csv": "item_id,item,requirements,method,tool,command_ref,owner,period,due,status",
-    "index.csv": "file,requirements,source,command,period,collected_at,sha256,redacted",
+    "index.csv": "file,type,requirements,source,command,period,collected_at,sha256,redacted",
     "assessments.csv": "evidence,requirement,verdict,gaps,fix,reviewer,date,approved",
-    "findings.csv": "id,requirement,severity,finding,fix,owner,status",
+    "findings.csv": "id,requirement,severity,finding,fix,owner,status,opened,due,closed",
 }
 CATALOG_HEADER = "framework,req_id,title,summary,mandatory,function,typical_evidence,category,scf_ids"
-EXPECTED_ROWS = {"soc2": 61, "iso27001": 118, "dpdp": 32, "gdpr": 38, "pci-dss": 71, "hipaa-security": 62,
+EXPECTED_ROWS = {"soc2": 61, "iso27001": 118, "dpdp": 32, "gdpr": 38, "pci-dss": 71, "hipaa-security": 69,
                  "nist-csf-2.0": 106, "nis2": 35, "dora": 28, "cert-in": 7, "rbi": 26, "sebi-cscrf": 21}
 FUNCTIONS = {"Engineering", "IT", "HR", "Legal", "Leadership"}
+INDEX_TYPES = {"config", "population", "log", "policy", "procedure", "record", "report", "screenshot", "other"}
+FINDING_STATUS = {"open", "in-progress", "accepted", "closed"}
 SCF_ID = re.compile(r"^[A-Z]{3}-\d{2}(\.\d+)?$")
 
 errors = []
@@ -178,7 +180,22 @@ ALLOWED_VERB = {
     "gam": re.compile(r"^gam (all users |ou \S+ )?(info|print|show|report)\b"),
     "gh": re.compile(r"^gh (api|repo list|auth status)\b"),
 }
-GH_WRITE_FLAGS = re.compile(r"\s(-X|--method|-f|-F|--field|--raw-field|--input)\b")
+GH_WRITE_FLAGS = re.compile(r"\s(-X|--method|-f|-F|--field|--raw-field|--input)(\s|=|$)")
+# Commands that return secrets even though their verb looks read-only (keep in sync with evidence-playbooks SKILL.md)
+SECRET_DENY = re.compile(
+    r"^aws (secretsmanager get-secret-value|ssm get-parameters?(-by-path)?\b|kms decrypt|ecr get-(login-password|authorization-token)"
+    r"|codeartifact get-authorization-token|sts (get-session-token|get-federation-token|assume-role)|rds generate-db-auth-token"
+    r"|lambda get-function(-configuration)?\b|iam get-ssh-public-key)"
+    r"|^az (keyvault (secret (show|download)|key download|certificate download)|storage account (keys list|show-connection-string)"
+    r"|storage .*generate-sas|acr credential show|cosmosdb keys list|redis list-keys|servicebus .*keys list|eventhubs .*keys list"
+    r"|functionapp (function )?keys list|webapp deployment list-publishing-(credentials|profiles)|aks get-credentials"
+    r"|sql db show-connection-string|account get-access-token)"
+    r"|^az rest .*vault\.azure\.net"
+    r"|^gcloud (auth (application-default )?print-(access|identity)-token|secrets versions access|container clusters get-credentials"
+    r"|sql generate-login-token)"
+    r"|^gh (auth token|api graphql|secret\b|variable get)"
+    r"|^gam .*backupcodes"
+)
 
 
 def commands_in(cell):
@@ -199,6 +216,8 @@ def check_command(where, cmd):
             continue
         if not ALLOWED_VERB[tool].search(part):
             err("playbooks", f"{where}: command not on the read-only allowlist: {part}")
+        if SECRET_DENY.search(part):
+            err("playbooks", f"{where}: command returns secrets (denylist): {part}")
         if tool == "gh" and GH_WRITE_FLAGS.search(part):
             err("playbooks", f"{where}: gh api command uses a write flag: {part}")
     if re.search(r"[;&]|\$\(|`", bare):
@@ -249,7 +268,7 @@ def readiness(app_rows, ass_rows):
     for (_, req), r in latest.items():
         fw, rid = req.split(":", 1)
         s = {"satisfies": 1.0, "partial": 0.5, "fails": 0.0}[r["verdict"]]
-        score[(fw, rid)] = max(score.get((fw, rid), 0.0), s)
+        score[(fw, rid)] = min(score.get((fw, rid), 1.0), s)  # worst verdict across evidence
     out = {}
     for fw, ids in applicable.items():
         total = sum(score.get((fw, i), 0.0) for i in ids)
@@ -278,6 +297,17 @@ def check_examples(keys):
                 for k in filter(None, r["requirements"].split(";")):
                     if k not in keys:
                         err("examples", f"{name}: index requirement '{k}' not in catalogs")
+                if r["type"] not in INDEX_TYPES:
+                    err("examples", f"{name}: index type '{r['type']}' for {r['file']}")
+        fnd = os.path.join(comp, "audit", "findings.csv")
+        if os.path.isfile(fnd):
+            for r in read_csv(fnd)[1]:
+                if r["status"] not in FINDING_STATUS or r["severity"] not in ("major", "minor", "observation"):
+                    err("examples", f"{name}: finding {r['id']} has status '{r['status']}' / severity '{r['severity']}'")
+                if not re.match(r"^\d{4}-\d{2}-\d{2}$", r["opened"]):
+                    err("examples", f"{name}: finding {r['id']} needs an ISO 'opened' date")
+                if (r["status"] in ("closed", "accepted")) != bool(r["closed"]):
+                    err("examples", f"{name}: finding {r['id']}: 'closed' date must be set exactly when status is closed/accepted")
         app, ass = os.path.join(comp, "applicability.csv"), os.path.join(comp, "audit", "assessments.csv")
         if os.path.isfile(app):
             for r in read_csv(app)[1]:

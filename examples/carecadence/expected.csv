@@ -25,3 +25,7 @@ requirement,soc2,C1.1,yes,Confidentiality selected
 requirement,soc2,P1.1,yes|no,Privacy optional - needs a reason either way
 requirement,nist-csf-2.0,GV.OC-01,yes,Target profile includes all
 requirement,nist-csf-2.0,PR.AA-03,yes,Target profile includes all
+requirement,hipaa-security,164.410,yes,Business associate must notify covered entities of breaches
+requirement,hipaa-security,164.402,yes,Breach risk assessment applies to BAs too
+requirement,hipaa-security,164.404,no,Covered-entity-only notice to individuals
+requirement,hipaa-security,164.408,no,Covered-entity-only notice to HHS

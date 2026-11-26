@@ -35,13 +35,13 @@ Computed from `applicability.csv` and `audit/assessments.csv` (approved rows onl
 
 | Requirement | Procedure | Evidence | Verdict | Gap | Fix |
 |---|---|---|---|---|---|
-| {{soc2:CC8.1}} | {{Inspection + sample 25 PRs}} | {{CC8.1/2026-11-26_gh_branch-protection_api.json; ...}} | {{partial}} | {{1 of 25 PRs merged without approval (#482)}} | {{Enable "include administrators"}} |
+| {{soc2:CC8.1}} | {{Inspection + sample 25 PRs}} | {{soc2_CC8.1/2026-11-26_gh_branch-protection_api.json; ...}} | {{partial}} | {{1 of 25 PRs merged without approval (#482)}} | {{Enable "include administrators"}} |
 
 ## 6. Sampling appendix
 
 | Test | Population file | N | n | Method | Selected | Exceptions |
 |---|---|---|---|---|---|---|
-| {{Change management}} | {{CC8.1/2026-11-26_gh_merged-prs_api.json}} | {{612}} | {{25}} | {{interval k=24, s=7}} | {{#…}} | {{1}} |
+| {{Change management}} | {{soc2_CC8.1/2026-11-26_gh_merged-prs_api.json}} | {{612}} | {{25}} | {{interval k=24, s=12, sorted by PR number}} | {{#…}} | {{1}} |
 
 ## 7. Evidence integrity
 

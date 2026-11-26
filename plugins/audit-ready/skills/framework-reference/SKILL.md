@@ -29,7 +29,7 @@ allowed-tools: Read, Glob, Grep, Write, Bash, WebFetch
 | `dpdp` | `catalogs/dpdp.csv` | 32 | DPDP Act 2023 + DPDP Rules 2025 (notified Nov 2025) | Section / rule (`DPDP-8-5`, `DPDP-R7`) |
 | `gdpr` | `catalogs/gdpr.csv` | 38 | Regulation (EU) 2016/679 | Article (`Article 32`) |
 | `pci-dss` | `catalogs/pci-dss.csv` | 71 | PCI DSS v4.0.1 (June 2024) | Requirement x.y (`8.4`) + Appendices A1–A3 |
-| `hipaa-security` | `catalogs/hipaa-security.csv` | 62 | 45 CFR 164.306–164.316 | Standard / implementation spec (`164.312(d)`) |
+| `hipaa-security` | `catalogs/hipaa-security.csv` | 69 | Security Rule 45 CFR 164.306–164.316 + Breach Notification Rule 164.402–164.414. The **Privacy Rule is not covered**: say so in `scope.md` and recommend counsel review for it | Standard / implementation spec (`164.312(d)`, `164.410`) |
 | `nist-csf-2.0` | `catalogs/nist-csf-2.0.csv` | 106 | NIST CSWP 29, CSF 2.0 (Feb 2024) | Subcategory (`PR.AA-03`) |
 | `nis2` | `catalogs/nis2.csv` | 35 | Directive (EU) 2022/2555 Arts 20, 21, 23, 24 + Implementing Regulation (EU) 2024/2690 annex | Article paragraph; `IR-1`–`IR-13` = annex sections |
 | `dora` | `catalogs/dora.csv` | 28 | Regulation (EU) 2022/2554 (applies from 17 Jan 2025) + RTS on incident reporting | Article (Arts 28 and 30 split) |
@@ -105,13 +105,38 @@ State the reason for each category you include or exclude.
 |---|---|---|
 | GDPR | Controller, processor or both? EU establishment? | Rights and notice articles (12–22) apply to controllers. A processor supports them through Art 28 and is still bound by 28–33. Without an EU establishment, Art 27 (representative) applies. Arts 7, 8, 9, 10, 20, 22, 26, 35–39 and 44–49 apply only when their trigger is true |
 | PCI DSS | Which SAQ, or a ROC? Merchant or service provider? | The SAQ decides which requirements apply. SAQ A (fully hosted payment page) covers only parts of Req 2, 3, 6, 8, 9, 11 and 12, and other rows are `no` with reason "SAQ A". Since the January 2025 SAQ A revision, 6.4.3 and 11.6.1 are replaced by an eligibility confirmation about script attacks; check the current SAQ. SAQ A-EP and SAQ D cover progressively more. A1 applies only to multi-tenant service providers, A2 only to card-present terminals with early TLS, and A3 only to designated entities. Mark Req 9 rows `inherited` for cloud-hosted CDEs |
-| HIPAA | Covered entity or business associate? | Standards and required specs are mandatory. **Addressable** specs are not optional: implement them, or document why an equivalent alternative is reasonable. Use `applicable=yes` with reason "addressable: implemented" or "addressable: alternative documented (...)". Use `no` only where the spec doesn't fit at all, for example 164.308(a)(4)(ii)(A) when there's no clearinghouse |
+| HIPAA | Covered entity or business associate? | Standards and required specs are mandatory. **Addressable** specs are not optional: implement them, or document why an equivalent alternative is reasonable. Use `applicable=yes` with reason "addressable: implemented" or "addressable: alternative documented (...)". Use `no` only where the spec doesn't fit at all, for example 164.308(a)(4)(ii)(A) when there's no clearinghouse. Breach rows: 164.402, 164.412 and 164.414 apply to both. 164.404, 164.406 and 164.408 apply only to **covered entities**. **164.410 applies to business associates** (notify the covered entity within 60 days) and is locked once the company is a BA |
 | NIST CSF 2.0 | Target tier and profile? | Nothing is mandatory. Agree a target profile: propose `yes` for all subcategories, and `no` only with a reason the user accepts. Record the target tier (1–4) in `scope.md` |
 | NIS2 | Sector (Annex I or II), size, essential or important, which Member States? Listed digital provider? | Arts 20, 21 and 23 apply to every in-scope entity. `IR-*` rows apply only to the digital providers listed in IR 2024/2690 (DNS, TLD, cloud, data centre, CDN, MSP, MSSP, online marketplaces, search engines, social networks, trust services); otherwise mark them `no`. If the company is only a supplier to an NIS2 entity, scope Art 21.2(d) and 21.3 obligations as contractual flow-down |
 | DORA | Financial entity, ICT third-party provider, or designated critical ICT provider? Do your services support the customer's critical or important functions? | **Financial entity:** all rows apply. Art 16 replaces Arts 5–15 for entities on the simplified regime, Art 23 only for payment, credit and e-money institutions, and Arts 26–27 only if designated for TLPT. **ICT supplier:** mark Arts 5–27 `no` with reason "not a financial entity; obligations flow down via customer contracts". Keep Arts 28.4, 30.2 and 30.3 (what customers will require), plus any Art 9–12 controls the customer contracts require |
 | CERT-In | Provider type (data centre, VPS, cloud, VPN, VASP)? | CERTIN-1 to CERTIN-5 are mandatory for bodies corporate operating in India. CERTIN-6 applies only to data centre, VPS, cloud and VPN providers. CERTIN-7 applies only to VASPs |
 | RBI | Regulated entity (bank, NBFC, payment system operator, ...) or a vendor to one? | **RE:** all `RBI-ITG-*` and `RBI-OUT-*` rows apply (in proportion to the RE category); `RBI-PDL-*` applies if it is a payment system provider or participant. **Vendor:** `RBI-OUT-03` to `RBI-OUT-07` apply as contractual flow-down, plus `RBI-PDL-*` if it stores or processes payment system data for a payment system operator; mark `RBI-ITG-*` rows `no` unless the RE's contract imposes them |
 | SEBI CSCRF | RE category (MII, Qualified, Mid-size, Small-size, Self-certification) or vendor? | The category decides which standards apply and how often (VAPT, audit, SOC model, CCI). SEBI-ID-02 (CCI) applies only to MIIs and Qualified REs. A vendor scopes SEBI-GV-04 and SEBI-GV-05 obligations through the RE's contract |
+
+### Entity-derived locks (mandatory after scoping)
+
+Some catalogs ship with `mandatory=no` on every row, because which rows are mandatory depends on the entity: PCI DSS, DORA, RBI and SEBI CSCRF (and the conditional HIPAA, NIS2 and CERT-In rows). After the scoping questions are answered, **lock** the rows the entity type makes mandatory:
+
+- In `applicability.csv`, write them with `applicable=yes`, `mandatory=yes` and the reason `mandatory (entity: <type>)`. For example, `mandatory (entity: SAQ D service provider)` or `mandatory (entity: DORA financial entity)`.
+- Locked rows follow rule 2: the user cannot set them to `no`. If the entity type changes, re-run the scoping step rather than editing rows.
+
+| Framework | Entity answer | Lock these rows |
+|---|---|---|
+| PCI DSS | ROC or SAQ D (merchant or service provider) | All of Req 1–12. A1 if multi-tenant service provider, A2 if card-present with early-TLS terminals, A3 if designated |
+| PCI DSS | Another SAQ (A, A-EP, B, B-IP, C, C-VT, P2PE) | The requirements that SAQ lists. Everything else is `no` with reason "not in SAQ <type>" |
+| DORA | Financial entity (standard regime) | Arts 5–14, 17–19, 24, 25, 28.1, 28.3, 28.4, 28.7, 28.8, 29, 30.2, and 30.3 when it has critical or important ICT services. Art 23 for payment, credit and e-money institutions. Arts 26–27 if designated for TLPT |
+| DORA | Financial entity (simplified regime, Art 16) | Art 16 instead of Arts 5–15, plus 17–19, 24, 25 and Ch V |
+| DORA | ICT third-party provider | Lock nothing directly. Lock the articles the customer addenda impose, with reason `mandatory (contract: <customer>)` |
+| RBI | Regulated entity | All `RBI-ITG-*` and `RBI-OUT-*`, plus `RBI-PDL-*` when it is a payment system provider or participant |
+| RBI | Vendor to a regulated entity | `RBI-OUT-03` to `RBI-OUT-07` (reason `mandatory (contract: <RE>)`), plus `RBI-PDL-*` when it stores or processes payment system data |
+| SEBI CSCRF | Regulated entity, any category | All rows except SEBI-ID-02 |
+| SEBI CSCRF | MII or Qualified RE | Also SEBI-ID-02 |
+| HIPAA | Covered entity | 164.404, 164.406, 164.408 |
+| HIPAA | Business associate | 164.410 |
+| NIS2 | Listed digital provider under IR 2024/2690 | All `IR-*` rows |
+| CERT-In | Data centre, VPS, cloud or VPN provider / VASP | CERTIN-6 / CERTIN-7 |
+
+If an entity answer is still unknown, don't lock anything. Propose `yes` and keep the question open, so nothing gets excluded on a guess.
 
 ## Cross-framework dedupe
 

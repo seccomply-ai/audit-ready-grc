@@ -31,9 +31,9 @@ Parse `$ARGUMENTS`. Accept zero or one framework key. The key must appear in the
    - **Evidence:** files in `index.csv`; rows with empty `sha256` (integrity gaps); files in `_inbox/` waiting.
    - **Audit:** functions audited (distinct functions in assessments via the catalogs' `function` column, curated or generated in `compliance/catalogs/`), proposed vs approved assessments.
    - **Catalog tier:** mark SCF-backed frameworks with `(SCF)` in the readiness line, for example `PCI DSS (SCF) 41%`.
-   - **Findings:** open findings by severity.
+   - **Findings:** take the last row per finding `id` (the current state). Count `open` and `in-progress` findings by severity, and list the overdue ones (`due` before today).
    - **Readiness:** per framework, using the skill's formula, always with counts.
-4. **Top open items**, at most 7, ordered: open major findings, applicable requirements with no plan item, overdue owner requests, open minor findings, inbox files waiting.
+4. **Top open items**, at most 7, ordered: overdue major findings, open major findings, applicable requirements with no plan item, overdue owner requests, open minor findings, inbox files waiting.
 
 ## Output
 

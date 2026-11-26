@@ -25,9 +25,24 @@ A command may run only if all of these are true:
    - aws: `get-*`, `list-*`, `describe-*`, plus the documented exception `iam generate-credential-report`, which only builds a report and changes no configuration;
    - gcloud: `list`, `describe`, `get-iam-policy`;
    - az: `show`, `list`, and `az rest --method get`;
-   - gh: `gh api` with no `-X`, `--method`, `-f`, `-F` or `--input` flags (any of these can turn a request into a write), plus `gh repo list` and `gh auth status`;
+   - gh: `gh api` with no `-X`, `--method`, `-f`, `-F`, `--field`, `--raw-field` or `--input` flags (any of these can turn a request into a write), never `gh api graphql` (it can carry mutations), plus `gh repo list` and `gh auth status`;
    - gam: `info`, `print`, `show`, `report`.
-3. It contains no shell redirection into anything other than the target evidence file, no `;`, `&&` or pipes into commands other than `jq`, `base64 -d` or `head`, and no `$( )` that runs non-allowlisted commands.
+3. It is not on the **secret-returning denylist** below, even though its verb looks read-only.
+4. It contains no shell redirection into anything other than the target evidence file, no `;`, `&&` or pipes into commands other than `jq`, `base64 -d` or `head`, and no `$( )` that runs non-allowlisted commands.
+
+### Secret-returning denylist (never run, never "vary" a playbook command into these)
+
+Evidence is about configuration, never about credential values.
+
+| CLI | Denied |
+|---|---|
+| aws | `secretsmanager get-secret-value`, `ssm get-parameter`, `ssm get-parameters`, `ssm get-parameters-by-path` (any of these with `--with-decryption`, or on `SecureString` parameters), `kms decrypt`, `ecr get-login-password`, `ecr get-authorization-token`, `codeartifact get-authorization-token`, `sts get-session-token`, `sts get-federation-token`, `sts assume-role*`, `rds generate-db-auth-token`, `lambda get-function` and `lambda get-function-configuration` (they return environment variables), `iam get-ssh-public-key`, `cognito-idp` admin token calls |
+| az | `keyvault secret show`, `keyvault secret download`, `keyvault key download`, `keyvault certificate download`, `storage account keys list`, `storage account show-connection-string`, `storage * generate-sas`, `acr credential show`, `cosmosdb keys list`, `redis list-keys`, `servicebus * keys list`, `eventhubs * keys list`, `functionapp keys list`, `functionapp function keys list`, `webapp deployment list-publishing-credentials`, `webapp deployment list-publishing-profiles`, `aks get-credentials`, `sql db show-connection-string`, `account get-access-token`, `az rest` against Key Vault data-plane URLs (`*.vault.azure.net`) |
+| gcloud | `auth print-access-token`, `auth print-identity-token`, `auth application-default print-access-token`, `secrets versions access`, `container clusters get-credentials`, `sql generate-login-token`, `iam service-accounts keys get-public-key` (not needed for evidence) |
+| gh | `gh auth token`, `gh api graphql`, `gh secret` (any subcommand), `gh variable get` |
+| gam | `show backupcodes`, `print backupcodes`, any command that prints passwords or app-specific passwords' values |
+
+General rule: if a command's purpose is to return a secret, token, key, password, connection string or credential, it is denied, whatever its verb. Listing the *names* or *metadata* of secrets (for example `aws secretsmanager list-secrets`, or `az keyvault secret list` without values) is allowed when a playbook row asks for it.
 
 If anything the user asks for falls outside this list, say it is outside Audit Ready's read-only scope, and don't run it.
 
@@ -43,6 +58,7 @@ If anything the user asks for falls outside this list, say it is outside Audit R
    - move it to `compliance/evidence/<first-requirement-folder>/<YYYY-MM-DD>_<tool>_<item-slug>.<ext>`;
    - hash it;
    - append an `index.csv` row with:
+     - `type`: `config` for settings exports, `population` for lists to sample from (users, PRs, leavers, alert lists), `log` for activity or audit logs. GH-08, GH-03, AWS-04, GWS-02, GWS-03 and AZ-02 are populations; GH-15, GWS-06, GWS-07 and AWS-19 jobs are logs;
      - `requirements`: every applicable requirement the item supports, including SCF links the user accepted (see "Requirement keys and SCF tags");
      - `source`: `<tool> <account/org/project>`;
      - `command`: the exact command line;

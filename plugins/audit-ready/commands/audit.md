@@ -56,7 +56,8 @@ Parse `$ARGUMENTS`.
    Label all of it as **proposed**. Ask the user to approve everything, or to change specific rows (a verdict, severity, wording or owner).
 6. **Write.** After approval:
    - Append to `audit/assessments.csv` with `reviewer=audit-ready`, `date=today` and `approved=yes`. Rows the user didn't approve go in with `approved=no`.
-   - Append the findings to `audit/findings.csv` with `status=open`.
+   - Append the findings to `audit/findings.csv` with `status=open`, `opened=today` and the `due` date agreed with the user (propose 30 days for major, 60 for minor, 90 for observations). Leave `closed` empty.
+   - For an existing finding that this audit shows is fixed, or whose owner or due date changed, append a status-update row with the same `id` (see "Findings history" in grc-assistant). Never edit the earlier row.
    - Add plan items for anything in `still_needed`, setting `status=planned`.
    - Never edit or delete earlier rows. A re-audit adds new rows, and readiness uses the latest approved verdict per pair.
 7. **Report.** When the last selected function is done, or when `--report` is given:

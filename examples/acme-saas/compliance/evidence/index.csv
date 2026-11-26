@@ -1,5 +1,5 @@
-file,requirements,source,command,period,collected_at,sha256,redacted
-soc2_CC6.1/2026-11-24_gh_org-settings.json,soc2:CC6.1;dpdp:DPDP-R6,gh acme-shift,gh api orgs/acme-shift,point-in-time,2026-11-24T10:02:11Z,5062ee336418a30fc645ac5021305650381e4982c76b3ea04fa745169529a204,no
-soc2_CC6.1/2026-11-24_gam_users-2sv.csv,soc2:CC6.1;dpdp:DPDP-R6,gam acme-shift.example,"gam print users fields primaryemail,suspended,isadmin,isenrolledin2sv,isenforcedin2sv,lastlogintime",point-in-time,2026-11-24T10:05:40Z,48479e831a903c6820bfea27e1af0fbc79569016bee09608ce7265c0e3ffb4c3,no
-soc2_CC8.1/2026-11-24_gh_branch-protection_api.json,soc2:CC8.1,gh acme-shift/api,gh api repos/acme-shift/api/branches/main/protection,point-in-time,2026-11-24T10:03:02Z,901983f242659ac6dbdbd9055d879cc5ae40edb78b62705cb72a8fa8eda81835,no
-soc2_CC6.2/2026-11-25_hr_leavers-h2-2026.csv,soc2:CC6.2;soc2:CC6.3,owner:HR,manual upload (original name: leavers jul-oct.csv),2026-06-01 to 2026-11-30,2026-11-25T08:40:00Z,64d7153e477cdc362144a142e95a5da6ee6e448e15a756c187f5b200ba4bb364,no
+file,type,requirements,source,command,period,collected_at,sha256,redacted
+soc2_CC6.1/2026-11-24_gh_org-settings.json,config,soc2:CC6.1;dpdp:DPDP-R6,gh acme-shift,gh api orgs/acme-shift,point-in-time,2026-11-24T10:02:11Z,5062ee336418a30fc645ac5021305650381e4982c76b3ea04fa745169529a204,no
+soc2_CC6.1/2026-11-24_gam_users-2sv.csv,config,soc2:CC6.1;dpdp:DPDP-R6,gam acme-shift.example,"gam print users fields primaryemail,suspended,isadmin,isenrolledin2sv,isenforcedin2sv,lastlogintime",point-in-time,2026-11-24T10:05:40Z,48479e831a903c6820bfea27e1af0fbc79569016bee09608ce7265c0e3ffb4c3,no
+soc2_CC8.1/2026-11-24_gh_branch-protection_api.json,config,soc2:CC8.1,gh acme-shift/api,gh api repos/acme-shift/api/branches/main/protection,point-in-time,2026-11-24T10:03:02Z,901983f242659ac6dbdbd9055d879cc5ae40edb78b62705cb72a8fa8eda81835,no
+soc2_CC6.2/2026-11-25_hr_leavers-h2-2026.csv,population,soc2:CC6.2;soc2:CC6.3,owner:HR,manual upload (original name: leavers jul-oct.csv),2026-06-01 to 2026-11-30,2026-11-25T08:40:00Z,64d7153e477cdc362144a142e95a5da6ee6e448e15a756c187f5b200ba4bb364,no

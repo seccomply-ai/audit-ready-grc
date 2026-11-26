@@ -1,7 +1,7 @@
 {
   "name": "audit-ready",
-  "description": "Audit Ready - GRC assistant inside Claude Code: business scoping, framework applicability, read-only evidence collection and internal audit for SOC 2, ISO 27001 and India DPDP. Everything it produces is a plain file in compliance/.",
-  "version": "0.1.0",
+  "description": "Audit Ready - GRC assistant inside Claude Code: business scoping, framework applicability, read-only evidence collection (gh, aws, gam, gcloud, az) and internal audit. Curated catalogs for SOC 2, ISO 27001, GDPR, PCI DSS 4.0.1, HIPAA, NIST CSF 2.0, NIS2, DORA and India's DPDP, CERT-In, RBI and SEBI CSCRF, plus 240 more frameworks via SCF crosswalks. Everything it produces is a plain file in compliance/.",
+  "version": "0.2.0",
   "author": {
     "name": "Seccomply"
   },
@@ -14,6 +14,15 @@
     "soc2",
     "iso27001",
     "dpdp",
+    "gdpr",
+    "pci-dss",
+    "hipaa",
+    "nist-csf",
+    "nis2",
+    "dora",
+    "cert-in",
+    "rbi",
+    "sebi",
     "audit",
     "evidence",
     "scoping",

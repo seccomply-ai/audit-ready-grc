@@ -34,7 +34,7 @@ CURATED = {
     "dpdp": ("apac-ind-dpdpa-2023", "ind-dpdpa", "", "Curated. DPDP Act 2023 + DPDP Rules 2025; Rules rows mapped via their parent Act section", ("dpdp",)),
     "gdpr": ("emea-eu-gdpr-2016", "gdpr", "", "Curated. GDPR (EU) 2016/679, article level", ("under", "emea-eu-gdpr-2016")),
     "pci-dss": ("general-pci-dss-4-0-1", "pci-dss", "", "Curated. PCI DSS v4.0.1 (June 2024), requirement level x.y; applicability by SAQ", ("under", "general-pci-dss-4-0-1")),
-    "hipaa-security": ("usa-federal-law-hipaa-security-rule-2013", "us-hipaa-security", "", "Curated. HIPAA Security Rule 45 CFR 164.306-164.316, standards and implementation specifications", ("under", "usa-federal-law-hipaa-security-rule-2013")),
+    "hipaa-security": ("usa-federal-law-hipaa-security-rule-2013", "us-hipaa-security", "", "Curated. HIPAA Security Rule 45 CFR 164.306-164.316 + Breach Notification Rule 164.402-164.414 (Privacy Rule out of scope)", ("under", "usa-federal-law-hipaa-security-rule-2013")),
     "nist-csf-2.0": ("general-nist-csf-2-0", "nist-csf-20", "", "Curated. NIST CSF 2.0 (Feb 2024), 106 subcategories", ("under", "general-nist-csf-2-0")),
     "nis2": ("emea-eu-nis2-2022", "eu-nis2", "", "Curated. NIS2 Directive (EU) 2022/2555 Arts 20, 21, 23 + Implementing Regulation (EU) 2024/2690 annex (IR-*)", ("nis2",)),
     "dora": ("emea-eu-dora-2023", "dora", "", "Curated. DORA Regulation (EU) 2022/2554, article level", ("under", "emea-eu-dora-2023")),
@@ -151,6 +151,10 @@ def catalog_with_scf(path, resolver, valid):
             invalid += [f"{r['req_id']}:{i}" for i in ids if i not in valid]
         else:
             ids = {i for i in resolver(r["req_id"]) if i in valid}
+            if not ids:  # crosswalk has nothing for this row: keep a hand mapping if one exists, validated
+                hand = {i for i in (r.get("scf_ids") or "").split(";") if i}
+                invalid += [f"{r['req_id']}:{i}" for i in hand if i not in valid]
+                ids = hand
         r["scf_ids"] = scf_sort(ids)
         if not ids:
             unmapped.append(r["req_id"])

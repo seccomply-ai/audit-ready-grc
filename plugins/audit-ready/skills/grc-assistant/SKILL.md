@@ -56,9 +56,9 @@ Templates live in `templates/` next to this file. Copy them verbatim on `/audit-
 |---|---|
 | `applicability.csv` | `framework,req_id,title,applicable,mandatory,reason,approved_by,approved_at` |
 | `evidence-plan.csv` | `item_id,item,requirements,method,tool,command_ref,owner,period,due,status` |
-| `evidence/index.csv` | `file,requirements,source,command,period,collected_at,sha256,redacted` |
+| `evidence/index.csv` | `file,type,requirements,source,command,period,collected_at,sha256,redacted` |
 | `audit/assessments.csv` | `evidence,requirement,verdict,gaps,fix,reviewer,date,approved` |
-| `audit/findings.csv` | `id,requirement,severity,finding,fix,owner,status` |
+| `audit/findings.csv` | `id,requirement,severity,finding,fix,owner,status,opened,due,closed` |
 
 Allowed values:
 
@@ -70,8 +70,9 @@ Allowed values:
 - `verdict`: `satisfies`, `partial`, `fails`
 - `approved`: `yes`, `no`
 - `severity`: `major`, `minor`, `observation`
-- `status` (findings): `open`, `accepted`, `closed`
+- `status` (findings): `open`, `in-progress`, `accepted` (risk accepted by the owner), `closed`
 - `redacted`: `yes`, `no`
+- `type` (index): `config` (settings or configuration export), `population` (a list to sample from: users, PRs, leavers, tickets), `log` (activity or audit log), `policy` (approved policy or standard), `procedure` (procedure, plan or runbook), `record` (evidence a control ran: review, approval, training record, test result), `report` (third-party report: SOC 2, pen test, AOC), `screenshot`, `other`
 
 CSV rules:
 
@@ -80,7 +81,8 @@ CSV rules:
 - Multi-value fields (`requirements`) use `;` with no spaces, using full keys of the form `<framework-key>:<req_id>`, such as `soc2:CC6.1;iso27001:A.5.15;pci-dss:8.4`. The first `:` separates the framework from the id; ids may contain spaces, for example `dora:Article 9.4`. Quote such a field.
 - Requirement ids for `tier=scf` frameworks come from `compliance/catalogs/<key>.csv`. Validate against that file.
 - Dates are ISO 8601: `2026-11-26`; timestamps `2026-11-26T14:03:00Z` (UTC).
-- `item_id` format `EV-001`; finding `id` format `F-001`. Never reuse an id.
+- `item_id` format `EV-001`; finding `id` format `F-001`. Never reuse an id for a different finding.
+- **Findings history.** `findings.csv` is append-only. To change a finding's status, due date or owner, append a new row with the **same `id`**: copy the unchanged fields, update the changed ones, and keep `opened` as it was. The **last row for an id is its current state**; earlier rows are its history. Set `closed` to the date when `status` becomes `closed` or `accepted`. `opened` is the date the finding was approved; `due` is the agreed fix date.
 - `file` and `evidence` paths are relative to `compliance/evidence/`.
 - Append rows with Edit (add lines at the end) or rewrite the whole file with Write; never reorder or drop columns.
 
@@ -97,12 +99,12 @@ At the start of every command:
 Hash every filed artifact with SHA-256 and record the lowercase hex in `index.csv`. Use whichever works on the user's shell, in this order:
 
 ```bash
-sha256sum "compliance/evidence/CC6.1/2026-11-26_gh_org-2fa.json"        # Linux, Git Bash on Windows
-shasum -a 256 "compliance/evidence/CC6.1/2026-11-26_gh_org-2fa.json"    # macOS
+sha256sum "compliance/evidence/soc2_CC6.1/2026-11-26_gh_org-2fa.json"        # Linux, Git Bash on Windows
+shasum -a 256 "compliance/evidence/soc2_CC6.1/2026-11-26_gh_org-2fa.json"    # macOS
 ```
 
 ```powershell
-(Get-FileHash -Algorithm SHA256 "compliance/evidence/CC6.1/2026-11-26_gh_org-2fa.json").Hash.ToLower()
+(Get-FileHash -Algorithm SHA256 "compliance/evidence/soc2_CC6.1/2026-11-26_gh_org-2fa.json").Hash.ToLower()
 ```
 
 Hash after redaction and after the file is in its final location. If a hash cannot be computed, leave `sha256` empty and tell the user; never write a made-up hash.
@@ -114,9 +116,13 @@ Before filing raw output, search it for secrets and replace each value with `[RE
 - AWS access keys `AKIA[0-9A-Z]{16}` / `ASIA[0-9A-Z]{16}` and anything labelled `SecretAccessKey`, `SessionToken`
 - GitHub tokens `gh[pousr]_[A-Za-z0-9]{36,}` and `github_pat_[A-Za-z0-9_]{20,}`
 - Google API keys `AIza[0-9A-Za-z_-]{35}`, OAuth `ya29\.[0-9A-Za-z_-]+`
-- Private key blocks `-----BEGIN [A-Z ]*PRIVATE KEY-----` through the matching END line
+- Private key blocks `-----BEGIN [A-Z ]*PRIVATE KEY-----` through the matching END line. The block may sit on one line with literal `\n` escapes, as in GCP service-account JSON, so match across `\n` escapes as well as real newlines
 - JWTs `eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+`
-- Any JSON value whose key contains `password`, `secret`, `token`, `apikey`, `api_key`, `privatekey`, `connectionstring`
+- Slack tokens `xox[abposr]-[A-Za-z0-9-]{10,}` and webhooks `https://hooks.slack.com/services/[A-Za-z0-9/]+`
+- Azure SAS signatures: the value of `sig=` in URLs or connection strings (`sig=[A-Za-z0-9%+/=]+`), plus `AccountKey=` and `SharedAccessKey=` values
+- Stripe keys `(sk|rk)_(live|test)_[A-Za-z0-9]{16,}`
+- Any JSON or YAML value whose key, compared case-insensitively with `_` and `-` removed, contains `password`, `passwd`, `secret`, `token`, `apikey`, `privatekey`, `privatekeyid`, `accesskey`, `accountkey`, `clientsecret`, `connectionstring` or `credential`. This covers GCP's `private_key` and `private_key_id`, Azure's `clientSecret` and `connection_string`
+- Basic-auth credentials in URLs: `https?://[^/\s:@]+:[^/\s@]+@` (replace the user:password part)
 
 Set `redacted=yes` on the index row and tell the user which file was redacted and how many values. Do not redact identifiers an auditor needs (account ids, usernames, resource names).
 
@@ -134,11 +140,14 @@ For each framework in scope:
 applicable = rows in applicability.csv where framework = F and applicable in (yes, inherited)
 current    = for each (evidence, requirement) pair, its latest approved row in assessments.csv
              (re-audits append rows; older rows stay as history)
-score(r)   = 1   if any current row for r has verdict satisfies
-             0.5 if the best current verdict for r is partial
-             0   otherwise (fails, or no approved assessment yet)
+score(r)   = worst current verdict for r across all its evidence:
+             0   if any current row for r is fails, or r has no approved assessment yet
+             0.5 else if any current row for r is partial
+             1   only if every current row for r is satisfies
 readiness  = sum(score) / count(applicable) * 100, rounded to a whole percent
 ```
+
+Use the **worst** verdict, not the best. A requirement is only as ready as its weakest in-scope system: MFA enforced in Google Workspace but not in AWS is not "satisfied". Evidence coverage counts too. A requirement that applies to several in-scope systems (all production cloud accounts, code hosts and identity providers named in `scope.md`) scores at most 0.5 until every one of those systems has approved evidence. The auditor records missing systems as a gap (rubric check 2).
 
 `inherited` requirements count as satisfied only when a vendor report (e.g. a subprocessor SOC 2 report) is filed and assessed as `satisfies`. Always show the counts next to the percentage: `SOC 2: 62% (31 of 50 satisfied, 4 partial, 15 open)`.
 

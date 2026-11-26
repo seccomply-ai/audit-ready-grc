@@ -8,13 +8,13 @@
 
 ## 1. Summary
 
-This was an early pass with only 4 artifacts filed, so readiness is low because most requirements have no evidence yet. The control that tested best is the GitHub organisation 2FA requirement. The risk assessment for the period is missing (major), and two configuration gaps were found in Workspace 2SV and branch protection (minor). Collect the planned AWS items and the requested owner documents, then re-audit.
+This was an early pass with only 4 artifacts filed, so readiness is low because most requirements have no evidence yet. GitHub enforces 2FA, but SOC 2 CC6.1 still scores as partial because Google Workspace doesn't enforce 2-step verification for every user. Readiness uses the worst verdict across in-scope systems. The risk assessment for the period is missing (major), and two configuration gaps were found in Workspace 2SV and branch protection (minor). Collect the planned AWS items and the requested owner documents, then re-audit.
 
 ## 2. Readiness by framework
 
 | Framework | Applicable | Satisfied | Partial | Fails / no evidence | Readiness |
 |---|---|---|---|---|---|
-| SOC 2 | 36 | 1 | 2 | 33 | 6% |
+| SOC 2 | 36 | 0 | 3 | 33 | 4% |
 | DPDP | 24 | 0 | 0 | 24 | 0% |
 
 ## 3. Findings

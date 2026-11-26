@@ -1,4 +1,4 @@
-id,requirement,severity,finding,fix,owner,status
-F-001,soc2:CC6.1;dpdp:DPDP-R6,minor,2 of 26 active Google Workspace users are not enforced for 2-step verification,Enforce 2SV for all OUs and re-collect GWS-02,IT lead,open
-F-002,soc2:CC8.1,minor,Branch protection on the production API repo can be bypassed by admins,Enable enforce_admins and document an emergency change procedure,CTO,open
-F-003,soc2:CC3.2,major,No risk assessment has been performed for the audit period,"Run a risk assessment, record it in a risk register and have the CEO approve it",CEO,open
+id,requirement,severity,finding,fix,owner,status,opened,due,closed
+F-001,soc2:CC6.1;dpdp:DPDP-R6,minor,2 of 26 active Google Workspace users are not enforced for 2-step verification,Enforce 2SV for all OUs and re-collect GWS-02,IT lead,open,2026-11-26,2026-12-15,
+F-002,soc2:CC8.1,minor,Branch protection on the production API repo can be bypassed by admins,Enable enforce_admins and document an emergency change procedure,CTO,open,2026-11-26,2026-12-15,
+F-003,soc2:CC3.2,major,No risk assessment has been performed for the audit period,"Run a risk assessment, record it in a risk register and have the CEO approve it",CEO,open,2026-11-26,2026-12-31,

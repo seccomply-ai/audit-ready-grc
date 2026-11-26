@@ -33,14 +33,14 @@ To offer the plugin automatically to everyone working in a project, add this to 
 
 | Tier | Frameworks | What you get |
 |---|---|---|
-| Curated (12) | SOC 2, ISO 27001:2022, DPDP Act 2023 + Rules 2025, GDPR, PCI DSS 4.0.1, HIPAA Security Rule, NIST CSF 2.0, NIS2 (+ IR 2024/2690), DORA, CERT-In Directions, RBI (IT governance, IT outsourcing, payment data localisation), SEBI CSCRF | Hand-written catalogs: paraphrased summaries, mandatory flags, owning function, typical evidence, framework-specific applicability rules, and hand-mapped CLI evidence |
-| SCF-backed (240) | Every other framework mapped by the [Secure Controls Framework](https://securecontrolsframework.com), including NIST 800-53, CIS v8.1, CMMC, FedRAMP, NYDFS, CCPA, MAS TRM, Essential 8, APRA CPS 234 | A catalog generated at scope time from the SCF crosswalk, the same data source claude-grc-engineering uses: real requirement ids with SCF wording, and no mandatory flags |
+| Curated (12) | SOC 2, ISO 27001:2022, DPDP Act 2023 + Rules 2025, GDPR, PCI DSS 4.0.1, HIPAA Security + Breach Notification Rules, NIST CSF 2.0, NIS2 (+ IR 2024/2690), DORA, CERT-In Directions, RBI (IT governance, IT outsourcing, payment data localisation), SEBI CSCRF | Hand-written catalogs: paraphrased summaries, mandatory flags, owning function, typical evidence, framework-specific applicability rules, and hand-mapped CLI evidence |
+| SCF-backed (240) | Every other framework mapped by the [Secure Controls Framework](https://securecontrolsframework.com) (data read from the GRC Engineering Club's community SCF API mirror, not an official SCF release), including NIST 800-53, CIS v8.1, CMMC, FedRAMP, NYDFS, CCPA, MAS TRM, Essential 8, APRA CPS 234 | A catalog generated at scope time from the SCF crosswalk, the same data source claude-grc-engineering uses: real requirement ids with SCF wording, and no mandatory flags |
 
 RBI, SEBI and CERT-In catalogs use thematic ids, and these regulators revise their circulars often. Verify the clause references against the latest circulars before an audit.
 
 Every catalog row and every playbook row carries SCF control ids, so one artifact can support requirements in several frameworks. You confirm each such link.
 
-SCF data is CC BY-ND 4.0. It is downloaded at run time into `~/.cache/claude-grc/scf/` and never shipped in this repo.
+SCF data is CC BY-ND 4.0. It is downloaded at run time from the community mirror (`grcengclub.github.io/scf-api`) into `~/.cache/claude-grc/scf/<scf_version>/` and never shipped in this repo. Curated `scf_ids` were built against SCF 2026.1, and Audit Ready reads the current version from the mirror's `summary.json`.
 
 ## How it works
 
@@ -73,12 +73,12 @@ compliance/
   evidence-plan.csv        evidence item, requirements, method, owner, due, status
   evidence/
     _inbox/                owners drop files here
-    index.csv              file, requirements, source, command, period, collected_at, sha256, redacted
+    index.csv              file, type, requirements, source, command, period, collected_at, sha256, redacted
     <requirement-id>/      filed artifacts
   requests/<owner>.md      drafted evidence requests
   audit/
     assessments.csv        evidence, requirement, verdict, gaps, fix, reviewer, date, approved
-    findings.csv           id, requirement, severity, finding, fix, owner, status
+    findings.csv           id, requirement, severity, finding, fix, owner, status, opened, due, closed (append-only)
     <date>-internal-audit-report.md
 ```
 
@@ -88,7 +88,7 @@ The CSV columns are fixed by templates. Readiness is always computed from `appli
 
 | Part | Contents |
 |---|---|
-| Skills | `grc-assistant` (rules, folder format, templates, hashing, redaction, readiness formula), `business-discovery`, `framework-reference` (registry of 252 frameworks; 12 curated catalogs with 605 requirements; SCF-backed catalogs generated on demand), `evidence-playbooks` (gh, aws, gam, gcloud, az, each row tagged with SCF ids), `internal-audit-method` (rubric, sampling, severity, report) |
+| Skills | `grc-assistant` (rules, folder format, templates, hashing, redaction, readiness formula), `business-discovery`, `framework-reference` (registry of 252 frameworks; 12 curated catalogs with 612 requirements; SCF-backed catalogs generated on demand), `evidence-playbooks` (gh, aws, gam, gcloud, az, each row tagged with SCF ids), `internal-audit-method` (rubric, sampling, severity, report) |
 | Agents | `site-researcher`, `evidence-reviewer`, `internal-auditor` |
 | Examples | `examples/acme-saas` (a complete sample folder), plus scoping test briefs with expected outcomes: `kirana-pay`, `ledgerloop`, `carecadence` |
 | Tests | `tests/validate_repo.py`, `tests/check_scope_result.py`, CI in `.github/workflows/validate.yml` |

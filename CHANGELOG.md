@@ -1,5 +1,31 @@
 # Changelog
 
+## 0.2.0 - 2026-11-26
+
+Fixes from an external review of 0.1.0 plus Phases A–C. The base for curated `scf_ids` is SCF 2026.1 (via the community API mirror).
+
+- **Readiness uses the worst verdict.** A requirement scores 1 only if every current verdict satisfies, and at most 0.5 until every in-scope system has evidence. The internal auditor adds `(none: <system>)` rows for systems with no evidence. As a result, the acme-saas example's SOC 2 readiness drops from 6% to 4%.
+- **Read-only allowlist hardened.**
+  - gh: `--field`, `--raw-field` and `gh api graphql` are denied.
+  - A new denylist covers secret-returning commands that look read-only (`secretsmanager get-secret-value`, `ssm get-parameter`, `keyvault secret show`, `storage account keys list`, `acr credential show`, `auth print-access-token`, `gh auth token`, ...).
+  - `tests/validate_repo.py` enforces both.
+- **HIPAA Breach Notification Rule** added (§164.402–414; 69 rows). §164.410 is locked for business associates. The Privacy Rule is stated as out of scope.
+- **Entity-derived mandatory locks** for PCI DSS (SAQ type), DORA, RBI and SEBI CSCRF, plus the conditional HIPAA, NIS2 and CERT-In rows. Locked rows are written with `mandatory=yes` and the reason `mandatory (entity: ...)` or `mandatory (contract: ...)`. The scope checker fails a locked row set to `no`.
+- **Sampling.**
+  - Systematic interval selection only, with an exact `jq`, `sort` or `sed` recipe and a fixed start `s = floor(k/2)`.
+  - Seeded random removed.
+  - Readiness minimums raised (monthly 3, weekly 10, daily 25), with typical auditor ranges shown alongside.
+- **`findings.csv`** gains `opened`, `due` and `closed`. It is append-only: the last row per id is the current state.
+- **`index.csv`** gains `type` (`config`, `population`, `log`, `policy`, `procedure`, `record`, `report`, `screenshot`, `other`). The inquiry step uses `type` = `policy` or `procedure`.
+- **SCF source** is described as the GRC Engineering Club community mirror. The version is read from `summary.json`, not assumed.
+- **Windows-safe SCF commands:** `python` with an interpreter check, `$HOME` instead of `~`, and PowerShell variants.
+- **Redaction** adds Slack, Azure SAS and `AccountKey`, Stripe, basic-auth URLs, and normalised key names (`private_key`, `private_key_id`, `client_secret`).
+- **Consistency fixes:**
+  - evidence folder examples use `<framework>_<req_id>/`;
+  - a single hash-mismatch gap text;
+  - ISO 4.1 and 4.2 mention the climate-change amendment (Amd 1:2024).
+- **Descriptions** in `plugin.json`, the marketplace and the READMEs list all 12 curated frameworks.
+
 ## Unreleased: framework expansion, Phase C
 
 - New test briefs:
