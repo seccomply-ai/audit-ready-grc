@@ -1,0 +1,9 @@
+kind,framework,req_id,expect,why
+framework,soc2,,in,US enterprise prospect
+framework,dpdp,,in,Indian data principals
+framework,iso27001,,out,Not asked for yet
+requirement,soc2,CC6.4,inherited,AWS physical security
+requirement,soc2,C1.1,no,Confidentiality not selected
+requirement,soc2,A1.2,yes,Availability selected
+requirement,dpdp,DPDP-9,no,No children's data
+requirement,dpdp,DPDP-R6,yes,Mandatory

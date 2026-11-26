@@ -1,0 +1,34 @@
+kind,framework,req_id,expect,why
+framework,dora,,in,ICT supplier to EU banks with DORA addenda
+framework,gdpr,,in,EU establishment; processes EU personal data
+framework,iso27001,,in,Banks ask for certification
+framework,cert-in,,in,Pune subsidiary operates ICT systems in India
+framework,dpdp,,in,Employee personal data in India
+framework,pci-dss,,out,IBANs and settlement data are not cardholder data
+framework,soc2,,out,No US customers
+framework,nis2,,either,MSP status unclear - open question for counsel
+requirement,dora,Article 5,no,Supplier mode: not a financial entity
+requirement,dora,Article 6,no,Supplier mode
+requirement,dora,Article 17,no,Supplier mode
+requirement,dora,Article 19,no,Supplier mode
+requirement,dora,Article 24,no,Supplier mode
+requirement,dora,Article 26,no,Not designated for TLPT
+requirement,dora,Article 9,yes,Imposed by customer addenda
+requirement,dora,Article 12,yes,Imposed by customer addenda
+requirement,dora,Article 28.4,yes,Supports customers' pre-contract assessment
+requirement,dora,Article 30.2,yes,Contract provisions customers require
+requirement,dora,Article 30.3,yes,Service supports a critical or important function
+requirement,gdpr,Article 27,no,Has an EU establishment
+requirement,gdpr,Article 8,no,No services to children
+requirement,gdpr,Article 15,yes,Controller for own employee and lead data
+requirement,gdpr,Article 28,yes,Processor for bank settlement data
+requirement,gdpr,Article 32,yes,Mandatory
+requirement,gdpr,Article 33,yes,Mandatory
+requirement,gdpr,Article 46,yes,Remote access from India is a transfer
+requirement,iso27001,4.1,yes,Mandatory clause
+requirement,iso27001,9.2,yes,Mandatory clause
+requirement,iso27001,A.7.4,yes|inherited,AWS inherited; offices in scope
+requirement,cert-in,CERTIN-5,yes,Mandatory in India
+requirement,cert-in,CERTIN-6,no,Not a DC/VPS/cloud/VPN provider
+requirement,cert-in,CERTIN-7,no,Not a VASP
+requirement,nis2,IR-1,no,Only if MSP status is confirmed

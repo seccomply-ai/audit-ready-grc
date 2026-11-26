@@ -1,0 +1,64 @@
+name: validate
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  static:
+    name: Static checks (catalogs, playbook allowlist, examples)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate repo
+        run: python -I tests/validate_repo.py
+      - name: Scope checker sanity run (acme-saas)
+        run: python -I tests/check_scope_result.py --compliance examples/acme-saas/compliance --expected examples/acme-saas/expected.csv
+
+  lint:
+    name: Markdown lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: npx --yes markdownlint-cli2@0.24.2 "**/*.md"
+
+  scf-freshness:
+    name: SCF data up to date (informational)
+    runs-on: ubuntu-latest
+    continue-on-error: true  # upstream SCF releases should prompt a refresh, not block unrelated PRs
+    env:
+      SCF_VERSION: "2026.1"
+      BASE_REPO_COMMIT: 79ac7a7
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Fetch SCF data into cache
+        run: |
+          B=https://grcengclub.github.io/scf-api/api
+          C=$HOME/.cache/claude-grc/scf/$SCF_VERSION/api
+          mkdir -p "$C/crosswalks"
+          curl -sSf "$B/controls.json" -o "$C/controls.json"
+          curl -sSf "$B/crosswalks.json" -o "$C/crosswalks.json"
+          for id in general-aicpa-tsc-2017 general-iso-27001-2022 general-iso-27002-2022 apac-ind-dpdpa-2023 \
+                    emea-eu-gdpr-2016 general-pci-dss-4-0-1 usa-federal-law-hipaa-security-rule-2013 \
+                    general-nist-csf-2-0 emea-eu-nis2-2022 emea-eu-nis2-annex-2024 emea-eu-dora-2023; do
+            curl -sSf "$B/crosswalks/$id.json" -o "$C/crosswalks/$id.json"
+          done
+      - name: Fetch claude-grc-engineering plugin metadata (pinned)
+        run: |
+          git clone --quiet https://github.com/GRCEngClub/claude-grc-engineering base-repo
+          git -C base-repo checkout --quiet "$BASE_REPO_COMMIT"
+      - name: Check registry and curated scf_ids
+        run: python -I tools/build_scf_data.py --check --scf-version "$SCF_VERSION" --marketplace base-repo

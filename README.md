@@ -77,7 +77,8 @@ The CSV columns are fixed by templates. Readiness is always computed from `appli
 |---|---|
 | Skills | `grc-assistant` (rules, folder format, templates, hashing, redaction, readiness formula), `business-discovery`, `framework-reference` (registry of 252 frameworks; 12 curated catalogs with 605 requirements; SCF-backed catalogs generated on demand), `evidence-playbooks` (gh, aws, gam, gcloud, az, each row tagged with SCF ids), `internal-audit-method` (rubric, sampling, severity, report) |
 | Agents | `site-researcher`, `evidence-reviewer`, `internal-auditor` |
-| Examples | `examples/acme-saas` (a complete sample folder) and `examples/kirana-pay` (a scoping test brief) |
+| Examples | `examples/acme-saas` (a complete sample folder), plus scoping test briefs with expected outcomes: `kirana-pay`, `ledgerloop`, `carecadence` |
+| Tests | `tests/validate_repo.py`, `tests/check_scope_result.py`, CI in `.github/workflows/validate.yml` |
 
 ## Safety and trust
 
@@ -95,6 +96,7 @@ Risk register and vendor management modules, policy writing, remediation trackin
 
 ```bash
 claude plugin validate .                       # marketplace + plugin manifests
+python tests/validate_repo.py                  # catalogs, read-only playbook allowlist, examples (stdlib only)
 python tools/build_scf_data.py --check         # registry + curated scf_ids are up to date with the SCF cache
 npx markdownlint-cli2 "**/*.md"                # same lint rules as claude-grc-engineering
 ```

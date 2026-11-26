@@ -1,6 +1,16 @@
 # Changelog
 
-## Unreleased: framework expansion, Phase B
+## Unreleased: framework expansion, Phase C
+
+- New test briefs:
+  - `examples/ledgerloop`: EU ICT supplier, covering DORA supplier mode, GDPR controller and processor, an NIS2 open question, a PCI negative case, and CERT-In and DPDP for an India subsidiary.
+  - `examples/carecadence`: US health-tech business associate, covering HIPAA addressable specs, PCI SAQ A, SOC 2 categories and a NIST CSF target tier.
+- An `expected.csv` for every example. `tests/check_scope_result.py` checks a real scoping run against it, and always enforces "reason for every no/inherited" and "mandatory rows are no only with an entity-scope reason".
+- `tests/validate_repo.py`, stdlib only, runs static checks: manifests, templates, catalogs (row counts, allowed values, mandatory rules), registry, playbooks (requirement keys plus the **read-only command allowlist**), example hashes and readiness numbers, skill frontmatter, and the embedded generator compiling.
+- CI workflow: static checks, markdownlint, and an informational SCF freshness check pinned to SCF 2026.1 and base-repo commit 79ac7a7.
+- PCI SAQ A note: the January 2025 revision replaced 6.4.3 and 11.6.1 with an eligibility confirmation.
+
+## Framework expansion, Phase B
 
 - Nine new curated catalogs:
 

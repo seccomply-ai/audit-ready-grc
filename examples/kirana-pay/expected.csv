@@ -1,0 +1,16 @@
+kind,framework,req_id,expect,why
+framework,iso27001,,in,Partner bank requires certification
+framework,dpdp,,in,Consumer and merchant data in India
+framework,cert-in,,in,ICT systems in India
+framework,rbi,,in,Vendor to an RBI-regulated bank handling payment data
+framework,soc2,,out,No US buyers
+framework,pci-dss,,out,No card data (UPI via licensed aggregator)
+requirement,iso27001,6.1.2,yes,Mandatory clause
+requirement,dpdp,DPDP-9,yes,No age gate - children may use the app
+requirement,dpdp,DPDP-10,yes|no,SDF status open question for counsel
+requirement,dpdp,DPDP-16,yes,Cross-border analysis needed
+requirement,rbi,RBI-OUT-03,yes,Contractual flow-down from the bank
+requirement,rbi,RBI-PDL-01,yes,Handles payment system data
+requirement,rbi,RBI-ITG-02,no,Vendor - not a regulated entity
+requirement,cert-in,CERTIN-5,yes,Mandatory in India
+requirement,cert-in,CERTIN-6,no,Not a DC/VPS/cloud/VPN provider

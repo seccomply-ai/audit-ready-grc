@@ -1,6 +1,6 @@
 # Framework expansion plan
 
-Status: Phase A and Phase B done (2026-11-26); Phase C (new example briefs and tests) not started. Builds on v0.1.0 (SOC 2, ISO 27001:2022, DPDP).
+Status: Phases A, B and C done (2026-11-26). Remaining: run the end-to-end scoping tests in Claude Code (see `tests/README.md`), and have someone review the RBI, SEBI and CERT-In catalogs. Builds on v0.1.0 (SOC 2, ISO 27001:2022, DPDP).
 
 ## Goal
 
