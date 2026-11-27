@@ -1,6 +1,6 @@
 ---
 name: evidence-playbooks
-description: Read-only evidence collection playbooks for gh (GitHub), aws, gam (Google Workspace), gcloud (GCP) and az (Azure) - the exact get/list/describe commands, which SOC 2 / ISO 27001 / DPDP requirements each artifact supports, file naming, plus owner request templates for manual evidence. Use when building an evidence plan, running /audit-ready:collect, or drafting /audit-ready:request messages.
+description: Read-only evidence collection playbooks for gh (GitHub), aws, gam (Google Workspace), gcloud (GCP) and az (Azure) - the exact get/list/describe commands, which requirements each artifact supports across the 12 curated frameworks (SOC 2, ISO 27001, DPDP, GDPR, PCI DSS, HIPAA, NIST CSF, NIS2, DORA, CERT-In, RBI, SEBI CSCRF) plus SCF ids for any other framework, file naming, plus owner request templates for manual evidence. Use when building an evidence plan, running /audit-ready:collect, or drafting /audit-ready:request messages.
 allowed-tools: Read, Glob, Grep, Write, Edit, Bash
 ---
 

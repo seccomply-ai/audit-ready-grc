@@ -26,7 +26,7 @@ Fixes from an external review of 0.1.0 plus Phases A–C. The base for curated `
   - ISO 4.1 and 4.2 mention the climate-change amendment (Amd 1:2024).
 - **Descriptions** in `plugin.json`, the marketplace and the READMEs list all 12 curated frameworks.
 
-## Unreleased: framework expansion, Phase C
+## Framework expansion, Phase C
 
 - New test briefs:
   - `examples/ledgerloop`: EU ICT supplier, covering DORA supplier mode, GDPR controller and processor, an NIS2 open question, a PCI negative case, and CERT-In and DPDP for an India subsidiary.
