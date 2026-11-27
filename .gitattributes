@@ -2,3 +2,6 @@
 * text=auto eol=lf
 # Evidence is stored byte-for-byte; never normalise it
 examples/**/evidence/** -text
+# Images are binary
+*.png binary
+*.ico binary

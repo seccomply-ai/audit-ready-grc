@@ -24,6 +24,7 @@ Fixes from an external review of 0.1.0 plus Phases A–C. The base for curated `
   - evidence folder examples use `<framework>_<req_id>/`;
   - a single hash-mismatch gap text;
   - ISO 4.1 and 4.2 mention the climate-change amendment (Amd 1:2024).
+- **Icon:** `assets/icon.png` (512 px), `assets/icon-128.png` (shown in the README) and `assets/favicon.ico` (16–64 px).
 - **Descriptions** in `plugin.json`, the marketplace and the READMEs list all 12 curated frameworks.
 
 ## Framework expansion, Phase C

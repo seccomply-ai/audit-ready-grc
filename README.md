@@ -1,5 +1,7 @@
 # Audit Ready
 
+![Audit Ready icon](assets/icon-128.png)
+
 **Your GRC assistant inside Claude Code: scope it, collect it, audit it.**
 
 Audit Ready is a Claude Code plugin for GRC engineers, internal auditors and consultants getting a company ready for **SOC 2**, **ISO 27001**, **DPDP**, **GDPR**, **PCI DSS**, **HIPAA**, **NIST CSF**, **NIS2**, **DORA** and India's **CERT-In**, **RBI** and **SEBI** requirements. It can also scope about 240 more frameworks through the SCF. It does the slow work a consultant or junior analyst would do: it reads the business, maps what applies, pulls evidence from systems, and tests it before the auditor does. You stay in charge, and every decision is a proposal you approve.
