@@ -44,7 +44,7 @@ To offer the plugin automatically to everyone working in a project, add this to 
 | Curated (13) | SOC 2, ISO 27001:2022, ISO/IEC 42001:2023, DPDP Act 2023 + Rules 2025, GDPR, PCI DSS 4.0.1, HIPAA Security + Breach Notification Rules, NIST CSF 2.0, NIS2 (+ IR 2024/2690), DORA, CERT-In Directions, RBI (IT governance, IT outsourcing, payment data localisation), SEBI CSCRF | Hand-written catalogs: paraphrased summaries, mandatory flags, owning function, typical evidence, framework-specific applicability rules, and hand-mapped CLI evidence |
 | SCF-backed (239) | Every other framework mapped by the [Secure Controls Framework](https://securecontrolsframework.com) (data read from the GRC Engineering Club's community SCF API mirror, not an official SCF release), including NIST 800-53, CIS v8.1, CMMC, FedRAMP, NYDFS, CCPA, MAS TRM, Essential 8, APRA CPS 234 | A catalog generated at scope time from the SCF crosswalk, the same data source claude-grc-engineering uses: real requirement ids with SCF wording, and no mandatory flags |
 
-RBI, SEBI and CERT-In catalogs use thematic ids, and these regulators revise their circulars often. Verify the clause references against the latest circulars before an audit.
+RBI, SEBI and CERT-In catalogs use thematic ids, with the official clause in each row. They were source-checked on 27 Nov 2026 (`docs/reviews/india-catalogs-2026-11.md`), but that is not legal sign-off, and these regulators revise their circulars often. RBI's 2023 master directions were replaced in 2025-26 by entity-specific directions, so confirm the current text before an audit.
 
 Every catalog row and every playbook row carries SCF control ids, so one artifact can support requirements in several frameworks. You confirm each such link.
 

@@ -35,13 +35,13 @@ allowed-tools: Read, Glob, Grep, Write, Bash, WebFetch
 | `dora` | `catalogs/dora.csv` | 28 | Regulation (EU) 2022/2554 (applies from 17 Jan 2025) + RTS on incident reporting | Article (Arts 28 and 30 split) |
 | `iso42001` | `catalogs/iso42001.csv` | 65 | ISO/IEC 42001:2023 (+ Amd 1:2024 climate note) | Clauses 4.1–10.2 (27) + Annex A (38) |
 | `cert-in` | `catalogs/cert-in.csv` | 7 | CERT-In Directions under s.70B(6) IT Act, 28 Apr 2022 (+ FAQs) | Obligation (`CERTIN-1`–`CERTIN-7`) |
-| `rbi` | `catalogs/rbi.csv` | 26 | RBI MD on IT Governance, Risk, Controls and Assurance Practices (Nov 2023); RBI MD on Outsourcing of IT Services (Apr 2023); Storage of Payment System Data (Apr 2018) + FAQs | Thematic (`RBI-ITG-*`, `RBI-OUT-*`, `RBI-PDL-*`) |
-| `sebi-cscrf` | `catalogs/sebi-cscrf.csv` | 21 | SEBI Cybersecurity and Cyber Resilience Framework (Aug 2024) and its clarifications | Thematic by function (`SEBI-GV-*` … `SEBI-AU-*`) |
+| `rbi` | `catalogs/rbi.csv` | 26 | Built on the RBI MD on IT Governance, Risk, Controls and Assurance Practices (Nov 2023) and the MD on Outsourcing of IT Services (Apr 2023). **Both are repealed:** the entity-specific *Cybersecurity, Technology: Risk, Resilience and Assurance Framework Directions, 2026* (commercial, small finance, payments and co-operative banks, NBFCs, AIFIs, CICs) and the *Managing Risks in Outsourcing Directions, 2025* replace them, with largely the same content. Non-bank payment system operators follow RBI's separate cyber resilience master directions. Storage of Payment System Data (Apr 2018) + FAQs is still in force | Thematic (`RBI-ITG-*`, `RBI-OUT-*`, `RBI-PDL-*`) |
+| `sebi-cscrf` | `catalogs/sebi-cscrf.csv` | 21 | SEBI CSCRF circular of 20 Aug 2024 and its clarifications (31 Dec 2024, 28 Mar 2025, 30 Apr 2025, 30 Jun 2025, 28 Aug 2025). Data localisation (PR.DS.S2) is in abeyance since 31 Dec 2024 | Thematic by function (`SEBI-GV-*` … `SEBI-AU-*`) |
 
 Columns: `framework,req_id,title,summary,mandatory,function,typical_evidence,category,scf_ids`
 
 - `summary` is a short paraphrase keyed to the official id. It is **not** the text of the standard. Never present it as quoted text. Point users to the official source for the wording.
-- **RBI, SEBI and CERT-In:** their catalogs use **thematic Audit Ready ids**, not official clause numbers, because these instruments are revised often and are not structured as numbered controls. Each row names the instrument in `category`. Tell the user to confirm the clause references and current timelines against the latest circulars before an audit.
+- **RBI, SEBI and CERT-In:** their catalogs use **thematic Audit Ready ids** (`RBI-ITG-02`, `SEBI-PR-01`), not official clause numbers, because these instruments are revised often and are not structured as numbered controls. Each row's `category` names the instrument and the official clause (`CERT-In Directions 2022: (iv)`, `SEBI CSCRF 2024: PR.AA`, `RBI IT Governance MD 2023 ...: para 6`). The rows were source-checked on 27 Nov 2026 (`docs/reviews/india-catalogs-2026-11.md`); that is a source check, not legal sign-off. Tell the user to confirm the current text, especially for RBI, whose 2023 master directions were replaced by entity-specific 2025 and 2026 directions.
 - `mandatory=yes` means the item cannot be excluded once the framework is in scope **and the entity is in direct scope**. See "Framework-specific applicability" below.
 - `function` is the business function that usually owns the evidence: `Engineering`, `IT`, `HR`, `Legal` or `Leadership`. `/audit-ready:audit <function>` uses it.
 - `scf_ids` holds the SCF control ids the requirement maps to. They are computed from SCF crosswalks, or hand-mapped for CERT-In, RBI and SEBI. They are used only to link evidence across frameworks; see `scf.md`.
@@ -157,7 +157,7 @@ One evidence artifact often covers several requirements. Playbook rows carry han
 | Backups and DR | A1.2, A1.3 | A.8.13, A.5.30 | DPDP-R6 | | 164.308(a)(7) | PR.DS-11 | DORA 11, 12; NIS2 21.2(c); RBI-ITG-15 |
 | Incident reporting | CC7.3–CC7.5 | A.5.24–A.5.26 | DPDP-8-6, R7 (72 h) | 12.10 | 164.308(a)(6) | RS.CO-02 | GDPR 33 (72 h); NIS2 23 (24 h / 72 h / 1 mo); DORA 19; CERTIN-2 (6 h); SEBI-RS-01 (6 h) |
 | Vendors | CC9.2 | A.5.19–A.5.22 | DPDP-8-2 | 12.8 | 164.308(b) | GV.SC-* | GDPR 28; DORA 28–30; RBI-OUT-*; NIS2 21.2(d) |
-| Data location | | | DPDP-16 | | | | RBI-PDL-01; SEBI-PR-02; CERTIN-5; GDPR 44–46 |
+| Data location | | | DPDP-16 | | | | RBI-PDL-01; CERTIN-5 (FAQ 35 allows abroad if produced promptly); GDPR 44–46; SEBI PR.DS.S2 in abeyance |
 | Risk assessment | CC3.1–CC3.4 | 6.1.2, 8.2 | | 12.3 | 164.308(a)(1)(ii)(A) | ID.RA-* | NIS2 21.2(a); DORA 8 |
 | AI governance | | 5.2, 6.1.2 | | | | GV.OC, GV.RM | ISO 42001 5.2, 6.1.2–6.1.4, A.5 (management system shares clauses 4–10 with ISO 27001: one internal audit and management review can cover both) |
 | Training | CC2.2 | A.6.3, 7.3 | | 12.6 | 164.308(a)(5) | PR.AT-01 | NIS2 20.2, 21.2(g); DORA 13 |

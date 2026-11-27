@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.3.0 - 2026-11-27
+
+Deeper claude-grc-engineering reuse, a curated ISO 42001 catalog, and the content gaps left over from 0.2.0.
+
+- **Inspector results become requirement-linked evidence.** `/audit-ready:collect import` reads `~/.cache/claude-grc/runs.log`, picks the newest run per inspector, flags stale runs, and links Findings to requirements through catalog `scf_ids`. Inspector Findings use SCF control ids, so the old exact-id match linked almost nothing.
+- **Gap-assessment reports.** `/audit-ready:collect import gap` runs grc-engineer's `gap-assessment.js` (allowlisted: `--output=json`, report folder inside `_staging`, never `github-issues`) and files `findings.normalized.json`, mapped through its native framework ids.
+- **Inspector failures become proposed findings.** `/audit-ready:audit` and both agents apply a new "Inspector results" table in `severity.md` (critical/high → major, medium → minor, low/info → observation; remediation as the starting fix; one finding per root cause).
+- **`/audit-ready:status`** shows each inspector's last run and flags stale or unfiled runs.
+- **New `/audit-ready:package <fingerprint>`** verifies every hash, then builds a GPG-encrypted bundle with a SHA-256 manifest, using grc-engineer's `package-evidence.py` when installed.
+- **Framework-plugin cross-checks** documented (`/iso27001:soa-generator`, `/iso27001:evidence-checklist --export csv`, `/soc2:type-ii-planner`, `/pci-dss:saq-select`, breach-process commands).
+- **ISO/IEC 42001:2023** curated catalog: 65 rows (clauses 4–10 mandatory, 38 Annex A controls via the SoA), SCF-mapped from `general-iso-42001-2023`. New recommendation, applicability, dedupe rules, Q24 and a `signal-to-scope` trigger. Registry: 13 curated, 239 SCF-backed.
+- **Hand-mapped SCF ids** for 9 rows the crosswalks leave empty (DPDP §16 and Rule 15; GDPR Arts 6, 22, 26, 47; NIS2 Arts 20.1, 20.2, 24). DPDP §17 stays unmapped on purpose.
+- **India catalogs source-checked** against the primary documents (`docs/reviews/india-catalogs-2026-11.md`; not legal sign-off). 6 of 7 CERT-In, 21 of 26 RBI and 12 of 21 SEBI summaries corrected, and every row's `category` now names the instrument and official clause. Key changes:
+  - RBI's 2023 IT governance and IT outsourcing master directions are repealed and replaced by entity-specific 2026 cyber directions and 2025 outsourcing directions. Rows keep 2023 paragraph numbers, with the 2026 or 2025 commercial-bank paragraph where confirmed; a full rebase is an open item.
+  - SEBI CSCRF data localisation (PR.DS.S2) has been in abeyance since 31 Dec 2024; VAPT frequency depends on CII status; RTO 2 h and RPO 15 min are set by SEBI.
+  - CERT-In: Annexure I has 20 incident types; FAQ 35 allows logs abroad if produced promptly; subscriber records apply to public VPN providers only.
+- **Icon** added (`assets/`).
+- Tests: synthetic inspector and gap-report fixtures, validator checks for the gap-assessment allowlist and SCF mapping, ISO 42001 row and mandatory rules.
+
 ## 0.2.0 - 2026-11-26
 
 Fixes from an external review of 0.1.0 plus Phases A–C. The base for curated `scf_ids` is SCF 2026.1 (via the community API mirror).
@@ -24,7 +43,6 @@ Fixes from an external review of 0.1.0 plus Phases A–C. The base for curated `
   - evidence folder examples use `<framework>_<req_id>/`;
   - a single hash-mismatch gap text;
   - ISO 4.1 and 4.2 mention the climate-change amendment (Amd 1:2024).
-- **Icon:** `assets/icon.png` (512 px), `assets/icon-128.png` (shown in the README) and `assets/favicon.ico` (16–64 px).
 - **Descriptions** in `plugin.json`, the marketplace and the READMEs list all 12 curated frameworks.
 
 ## Framework expansion, Phase C

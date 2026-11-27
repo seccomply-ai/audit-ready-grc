@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Audit Ready: your GRC assistant inside Claude Code. Scope it, collect it, audit it.",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "pluginRoot": "./plugins"
   },
   "plugins": [
@@ -14,7 +14,7 @@
       "name": "audit-ready",
       "source": "./plugins/audit-ready",
       "description": "GRC assistant for scoping, read-only evidence collection and internal audit. Curated: SOC 2, ISO 27001, GDPR, PCI DSS, HIPAA, NIST CSF 2.0, NIS2, DORA, ISO 42001, DPDP, CERT-In, RBI, SEBI CSCRF; 239 more via SCF. Plain Markdown and CSV outputs.",
-      "version": "0.2.0"
+      "version": "0.3.0"
     }
   ]
 }
