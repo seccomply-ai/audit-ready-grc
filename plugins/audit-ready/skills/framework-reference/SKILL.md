@@ -164,4 +164,17 @@ If claude-grc-engineering's `grc-engineer` plugin is installed, `config/control-
 
 ## Framework plugins (optional)
 
-If the framework's `base_plugin` from claude-grc-engineering is installed (detected by grc-assistant), `/audit-ready:evidence-plan` can suggest `/<base_plugin>:evidence-checklist` as a second opinion. Specialist commands help with applicability, for example `/pci-dss:saq-select`, `/gdpr:dpia`, `/dora:incident-reporting` and `/eu-nis2:scope`. Audit Ready's catalogs, curated or generated, remain the source for `applicability.csv`.
+If the framework's `base_plugin` from claude-grc-engineering is installed (detected by grc-assistant), `/audit-ready:evidence-plan` can suggest `/<base_plugin>:evidence-checklist` as a second opinion. Specialist commands help with applicability, for example `/pci-dss:saq-select`, `/gdpr:dpia`, `/dora:incident-reporting`, `/eu-nis2:scope`, `/ind-dpdpa:scope` and `/nist-csf-20:scope`. Audit Ready's catalogs, curated or generated, remain the source for `applicability.csv`.
+
+Cross-checks worth offering when the plugin is installed:
+
+| Plugin | Command | Use in Audit Ready |
+|---|---|---|
+| `iso27001` | `/iso27001:evidence-checklist --export csv` | During `/audit-ready:evidence-plan`: list checklist items whose `control_id` has no plan item, as suggestions |
+| `iso27001` | `/iso27001:soa-generator` | During `/audit-ready:scope`: compare its Annex A inclusions with `applicability.csv` and show differences only |
+| `soc2` | `/soc2:type-ii-planner` | During `/audit-ready:scope`: sanity-check the audit period and sample timing in `scope.md` |
+| `pci-dss` | `/pci-dss:saq-select` | During `/audit-ready:scope`: confirm the SAQ type before the entity lock is applied |
+| `gdpr`, `ind-dpdpa` | `/gdpr:breach-process`, `/ind-dpdpa:breach-process` | During `/audit-ready:request`: a reference for what the breach procedure owner should send |
+| any | `/<base_plugin>:assess` | Runs grc-engineer's gap assessment for that one framework. Prefer `/audit-ready:collect import gap`, which files the same result as evidence |
+
+Their output goes to the chat. Audit Ready never copies it into `applicability.csv` or the plan without the user accepting each change.

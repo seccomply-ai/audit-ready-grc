@@ -10,5 +10,7 @@ Audit Ready is a GRC assistant inside Claude Code. Scope it, collect it, audit i
   - `/audit-ready:inbox` files what owners send back.
 - **Internal audit.** `/audit-ready:audit <function>` tests evidence, takes samples, and proposes verdicts and rated findings. It writes the internal audit report after you approve.
 - **Status.** `/audit-ready:status` shows readiness per framework, computed from the files.
+- **Hand-off.** `/audit-ready:package <fingerprint>` builds an encrypted, hash-manifested evidence bundle for the auditor.
+- **claude-grc-engineering (optional).** Inspector runs and gap assessments are imported as evidence, and their failures become proposed findings.
 
 Start with `/audit-ready:start`. Everything the plugin produces is plain Markdown or CSV in `compliance/`. See the repository README for details, safety rules and examples.

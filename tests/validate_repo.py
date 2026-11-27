@@ -254,6 +254,84 @@ def check_playbooks(keys):
         err("playbooks", f"only {len(seen)} playbook rows found")
 
 
+# ---------------------------------------------------------------- claude-grc-engineering integration
+FIX = os.path.join(ROOT, "tests", "fixtures")
+EVAL_STATUS = {"pass", "fail", "not_applicable", "inconclusive", "skipped"}
+SEVERITY = {"critical", "high", "medium", "low", "info"}
+GAP_CMD = re.compile(r"gap-assessment\.js")
+FENCE = re.compile(r"```[a-z]*\n(.*?)```", re.S)
+
+
+def scf_index(cats):
+    """SCF id -> set of framework:req_id keys from curated catalogs."""
+    idx = {}
+    for key, (_, rows, _) in cats.items():
+        for r in rows:
+            for s in filter(None, r["scf_ids"].split(";")):
+                idx.setdefault(s, set()).add(f"{key}:{r['req_id']}")
+    return idx
+
+
+def rollup(fid, native):
+    """Native id from a gap report -> curated catalog key, as commands/collect.md describes."""
+    if fid == "general-aicpa-tsc-2017":
+        return "soc2:" + re.sub(r"-POF\d+$", "", native)
+    if fid == "general-iso-27002-2022":
+        return "iso27001:A." + native
+    if fid == "general-iso-27001-2022":
+        return "iso27001:" + native
+    return None
+
+
+def check_integration(cats):
+    # 1. every gap-assessment command shown to users stays inside the allowlist
+    for f in glob.glob(os.path.join(PLUGIN, "**", "*.md"), recursive=True):
+        for block in FENCE.findall(open(f, encoding="utf-8").read()):
+            for line in block.split("\n"):
+                if not GAP_CMD.search(line):
+                    continue
+                if "--output=json" not in line or "--report-dir=compliance/evidence/_staging/" not in line:
+                    err("integration", f"{rel(f)}: gap-assessment must use --output=json and --report-dir=compliance/evidence/_staging/...: {line.strip()}")
+                if "github-issues" in line or "--create" in line:
+                    err("integration", f"{rel(f)}: gap-assessment must not create GitHub issues: {line.strip()}")
+    idx = scf_index(cats)
+    # 2. inspector Finding fixture: Finding v1 shape, and every SCF id links to a curated requirement
+    path = os.path.join(FIX, "findings", "github-inspector.json")
+    docs = json.load(open(path, encoding="utf-8"))
+    if not isinstance(docs, list) or not docs:
+        err("integration", f"{rel(path)}: must be a non-empty JSON array of Findings")
+        docs = []
+    for d in docs:
+        for k in ("schema_version", "source", "source_version", "run_id", "collected_at", "resource", "evaluations"):
+            if k not in d:
+                err("integration", f"{rel(path)}: Finding missing '{k}'")
+        for e in d.get("evaluations", []):
+            if e.get("status") not in EVAL_STATUS:
+                err("integration", f"{rel(path)}: bad status {e.get('status')}")
+            if e.get("status") == "fail" and (e.get("severity") not in SEVERITY or not e.get("message")):
+                err("integration", f"{rel(path)}: fail needs severity and message")
+            if e.get("control_framework") == "SCF" and e.get("control_id") not in idx:
+                err("integration", f"{rel(path)}: SCF {e.get('control_id')} maps to no curated requirement")
+    # 3. gap report fixture: native ids roll up to real catalog rows
+    path = os.path.join(FIX, "gap", "findings.normalized.json")
+    gap = json.load(open(path, encoding="utf-8"))
+    keys = valid_keys(cats)
+    hits = 0
+    for tier in ("tier1", "tier2", "tier3", "passes", "inconclusive"):
+        for item in gap.get(tier, []):
+            for fid, natives in item.get("frameworks", {}).items():
+                for n in natives:
+                    k = rollup(fid, n)
+                    if k is None:
+                        continue
+                    if k in keys:
+                        hits += 1
+                    elif not re.search(r"-POF|\.\d+\.\d+", n):
+                        err("integration", f"{rel(path)}: {fid} {n} rolls up to unknown {k}")
+    if hits == 0:
+        err("integration", f"{rel(path)}: no native id rolled up to a curated requirement")
+
+
 # ---------------------------------------------------------------- examples
 def readiness(app_rows, ass_rows):
     applicable = {}
@@ -366,6 +444,7 @@ def main():
     check_registry(cats)
     check_playbooks(keys)
     check_examples(keys)
+    check_integration(cats)
     check_markdown_units()
     if errors:
         print("\n".join(errors))

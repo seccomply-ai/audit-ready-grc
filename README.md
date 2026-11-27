@@ -29,7 +29,13 @@ To offer the plugin automatically to everyone working in a project, add this to 
 }
 ```
 
-[claude-grc-engineering](https://github.com/GRCEngClub/claude-grc-engineering) is optional. If its framework plugins (`soc2`, `iso27001`, `ind-dpdpa`) or inspectors (`aws-inspector`, `github-inspector`, ...) are installed, Audit Ready uses them, and it works the same without them.
+[claude-grc-engineering](https://github.com/GRCEngClub/claude-grc-engineering) is optional, and Audit Ready works the same without it. When it is installed, Audit Ready uses it:
+
+- **Inspector results become evidence.** `/audit-ready:collect import` files the newest `aws-`, `github-`, `gcp-`, `azure-`, `okta-` (and other) inspector runs, linked to requirements through their SCF ids. `/audit-ready:collect import gap` runs grc-engineer's gap assessment and files its requirement-level report.
+- **Failures become proposed findings.** `/audit-ready:audit` turns failing inspector checks into rated findings with the inspector's remediation as the starting fix.
+- **Stale data is flagged.** `/audit-ready:status` shows each inspector's last run.
+- **Encrypted hand-off.** `/audit-ready:package` builds a GPG-encrypted, hash-manifested bundle with grc-engineer's packager.
+- **Second opinions.** Framework plugins (`soc2`, `iso27001`, `pci-dss`, `gdpr`, `ind-dpdpa`, ...) are offered as cross-checks during scoping and planning.
 
 ## Frameworks
 
@@ -52,6 +58,8 @@ SCF data is CC BY-ND 4.0. It is downloaded at run time from the community mirror
                       /audit-ready:collect [tool]
                       /audit-ready:request [owner]
                       /audit-ready:inbox
+                      /audit-ready:collect import      (claude-grc-engineering)
+                                                       /audit-ready:package <fpr>
 ```
 
 | Command | Pillar | What it does |
@@ -59,10 +67,11 @@ SCF data is CC BY-ND 4.0. It is downloaded at run time from the community mirror
 | `/audit-ready:start` | All | Sets up `compliance/` (never overwrites), adds evidence to `.gitignore`, shows status |
 | `/audit-ready:scope <url>` | Scoping | Reads the website (every fact sourced), asks at most 5 questions at a time, recommends frameworks and TSC categories, drafts the Statement of Applicability and the scoping memo |
 | `/audit-ready:evidence-plan` | Collection | Builds a tool-specific evidence plan from the approved scope, deduplicated across frameworks |
-| `/audit-ready:collect [tool]` | Collection | Runs read-only `gh`, `aws`, `gam`, `gcloud` and `az` playbooks after you approve each command; saves raw output, redacts secrets, hashes it (SHA-256) and indexes it |
+| `/audit-ready:collect [tool]` | Collection | Runs read-only `gh`, `aws`, `gam`, `gcloud` and `az` playbooks after you approve each command; saves raw output, redacts secrets, hashes it (SHA-256) and indexes it. `import` files claude-grc-engineering inspector runs and gap reports |
 | `/audit-ready:request [owner]` | Collection | Drafts one evidence request per owner. Nothing is sent unless you ask |
 | `/audit-ready:inbox` | Collection | Checks, renames, hashes and files what owners dropped into `_inbox/`, and flags mismatches |
 | `/audit-ready:audit [function]` | Internal audit | Audits Engineering, IT, HR, Legal or Leadership like an external auditor would: inquiry, inspection and sample testing. It proposes verdicts and rated findings, then writes the report |
+| `/audit-ready:package <fingerprint>` | Hand-off | Verifies every hash, then builds one GPG-encrypted evidence bundle with a SHA-256 manifest for the auditor. Uses claude-grc-engineering's packager when installed. Nothing is sent |
 | `/audit-ready:status` | All | Readiness per framework computed from the CSVs, plus the top open items and the next step |
 
 ## Working files
@@ -105,7 +114,7 @@ The CSV columns are fixed by templates. Readiness is always computed from `appli
 
 ## Out of scope (v1)
 
-Risk register and vendor management modules, policy writing, remediation tracking, an auditor portal, continuous monitoring, and any hosted service. The P1 and P2 roadmap includes deeper claude-grc-engineering reuse, Jira, Freshservice and HRMS playbooks, and an automated leaver check.
+Risk register and vendor management modules, policy writing, remediation tracking, an auditor portal, continuous monitoring, and any hosted service. The P1 and P2 roadmap includes Jira, Freshservice and HRMS playbooks, and an automated leaver check.
 
 ## Development
 

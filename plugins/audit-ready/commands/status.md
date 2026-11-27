@@ -33,7 +33,8 @@ Parse `$ARGUMENTS`. Accept zero or one framework key. The key must appear in the
    - **Catalog tier:** mark SCF-backed frameworks with `(SCF)` in the readiness line, for example `PCI DSS (SCF) 41%`.
    - **Findings:** take the last row per finding `id` (the current state). Count `open` and `in-progress` findings by severity, and list the overdue ones (`due` before today).
    - **Readiness:** per framework, using the skill's formula, always with counts.
-4. **Top open items**, at most 7, ordered: overdue major findings, open major findings, applicable requirements with no plan item, overdue owner requests, open minor findings, inbox files waiting.
+   - **Automated sources (only when `~/.cache/claude-grc/runs.log` exists):** one line per inspector source with its last run date, age and fail count, and whether that run is filed in `index.csv`. Flag a run older than 30 days ("stale: ask the owner to run `/<source>:collect`") and an unfiled newer run ("newer run not filed: `/audit-ready:collect import`").
+4. **Top open items**, at most 7, ordered: overdue major findings, open major findings, applicable requirements with no plan item, overdue owner requests, open minor findings, stale or unfiled inspector runs, inbox files waiting.
 
 ## Output
 

@@ -26,7 +26,8 @@ A command may run only if all of these are true:
    - gcloud: `list`, `describe`, `get-iam-policy`;
    - az: `show`, `list`, and `az rest --method get`;
    - gh: `gh api` with no `-X`, `--method`, `-f`, `-F`, `--field`, `--raw-field` or `--input` flags (any of these can turn a request into a write), never `gh api graphql` (it can carry mutations), plus `gh repo list` and `gh auth status`;
-   - gam: `info`, `print`, `show`, `report`.
+   - gam: `info`, `print`, `show`, `report`;
+   - claude-grc-engineering (only when installed): exactly `node "<grc-engineer installPath>/scripts/gap-assessment.js" <framework ids> --output=json --report-dir=compliance/evidence/_staging/<dir> [--quiet] [--offline]`. It reads the local Findings cache and writes only the report folder. `--output=github-issues` is denied, and so is any `--report-dir` outside `compliance/evidence/_staging/`. Audit Ready never runs inspector `collect` scripts; the user runs those.
 3. It is not on the **secret-returning denylist** below, even though its verb looks read-only.
 4. It contains no shell redirection into anything other than the target evidence file, no `;`, `&&` or pipes into commands other than `jq`, `base64 -d` or `head`, and no `$( )` that runs non-allowlisted commands.
 
@@ -103,9 +104,9 @@ Items that no CLI can collect (policies, HR records, training, board minutes, ve
 
 ## Integration (optional)
 
-If claude-grc-engineering inspectors are installed (`aws-inspector`, `github-inspector`, `gcp-inspector`, `azure-inspector`, `okta-inspector`) and their cached Findings exist under `~/.cache/claude-grc/findings/<source>/`, `/audit-ready:collect import` can file the newest run file per source as evidence:
-- method `import`;
-- source `<connector> run <run_id>`;
-- command `imported from ~/.cache/claude-grc/findings/...`.
+When claude-grc-engineering inspectors have run (`aws-inspector`, `github-inspector`, `gcp-inspector`, `azure-inspector`, `okta-inspector`, and the other connectors such as `wiz-inspector` or `tenable-inspector`), their Findings sit in `~/.cache/claude-grc/findings/<source>/<run_id>.json`, with one summary line per run in `~/.cache/claude-grc/runs.log`.
 
-Copy it unchanged, then redact, hash and index it. Map its `evaluations[].control_id` values to requirements only where they match catalog ids.
+- `/audit-ready:collect import` files the newest run per source as evidence (method `import`, `type=report`, source `<source> run <run_id>`, command `imported from ~/.cache/claude-grc/findings/...`). The file is copied unchanged, then redacted, hashed and indexed.
+- Findings use SCF control ids (`evaluations[].control_framework == "SCF"`), so link them to requirements through the catalogs' `scf_ids`, with the same accept-or-trim step and the 3-per-requirement limit as playbook SCF links. Non-SCF evaluations (testssl) map by exact id only.
+- `/audit-ready:collect import gap` runs grc-engineer's gap-assessment engine (allowlisted above) and files `findings.normalized.json`, whose `frameworks{}` field already holds native ids for every in-scope SCF-mapped framework.
+- Inspectors check configuration across every resource they can see, which complements a playbook export: prefer the inspector run as population evidence (every repo, every bucket) and the playbook export as the detailed artifact.

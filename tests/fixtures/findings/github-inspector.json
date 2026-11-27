@@ -1,0 +1,64 @@
+[
+  {
+    "schema_version": "1.0.0",
+    "source": "github-inspector",
+    "source_version": "0.1.0",
+    "run_id": "20261124090000-0000aaaa",
+    "collected_at": "2026-11-24T09:00:01.000Z",
+    "resource": {
+      "type": "github_repository",
+      "id": "acme/api",
+      "account_id": "acme"
+    },
+    "evaluations": [
+      {
+        "control_framework": "SCF",
+        "control_id": "CHG-02",
+        "status": "pass"
+      },
+      {
+        "control_framework": "SCF",
+        "control_id": "MON-01.4",
+        "status": "fail",
+        "severity": "medium",
+        "message": "Dependabot vulnerability alerts are not enabled.",
+        "remediation": {
+          "summary": "Enable Dependabot alerts in repo Security settings.",
+          "automation": "auto_fixable"
+        }
+      }
+    ],
+    "metadata": {
+      "source": "github-inspector",
+      "fixture": "synthetic"
+    }
+  },
+  {
+    "schema_version": "1.0.0",
+    "source": "github-inspector",
+    "source_version": "0.1.0",
+    "run_id": "20261124090000-0000aaaa",
+    "collected_at": "2026-11-24T09:00:01.000Z",
+    "resource": {
+      "type": "github_repository",
+      "id": "acme/web",
+      "account_id": "acme"
+    },
+    "evaluations": [
+      {
+        "control_framework": "SCF",
+        "control_id": "CHG-02",
+        "status": "pass"
+      },
+      {
+        "control_framework": "SCF",
+        "control_id": "MON-01.4",
+        "status": "pass"
+      }
+    ],
+    "metadata": {
+      "source": "github-inspector",
+      "fixture": "synthetic"
+    }
+  }
+]

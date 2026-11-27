@@ -1,0 +1,206 @@
+{
+  "run_id": "20261124090000-0000aaaa",
+  "load_errors": [],
+  "tier1": [],
+  "tier2": [
+    {
+      "scf_id": "MON-01.4",
+      "title": "System Generated Alerts",
+      "family": "MON",
+      "status": "fail",
+      "severity": "medium",
+      "frameworks": {
+        "general-aicpa-tsc-2017": [
+          "CC7.2",
+          "CC7.2-POF2"
+        ],
+        "general-iso-27002-2022": [
+          "8.15"
+        ]
+      },
+      "failing_resources": [
+        {
+          "source": "github-inspector",
+          "resource_id": "acme/api",
+          "resource_type": "github_repository",
+          "message": "Dependabot vulnerability alerts are not enabled.",
+          "remediation": {
+            "summary": "Enable Dependabot alerts in repo Security settings.",
+            "ref": "grc-engineer://generate-implementation/vulnerability_management/github",
+            "effort_hours": 0.1,
+            "automation": "auto_fixable"
+          }
+        },
+        {
+          "source": "github-inspector",
+          "resource_id": "acme/web",
+          "resource_type": "github_repository",
+          "message": "Dependabot vulnerability alerts are not enabled.",
+          "remediation": {
+            "summary": "Enable Dependabot alerts in repo Security settings.",
+            "ref": "grc-engineer://generate-implementation/vulnerability_management/github",
+            "effort_hours": 0.1,
+            "automation": "auto_fixable"
+          }
+        },
+        {
+          "source": "github-inspector",
+          "resource_id": "acme/api",
+          "resource_type": "github_repository",
+          "message": "Dependabot vulnerability alerts are not enabled.",
+          "remediation": {
+            "summary": "Enable Dependabot alerts in repo Security settings.",
+            "ref": "grc-engineer://generate-implementation/vulnerability_management/github",
+            "effort_hours": 0.1,
+            "automation": "auto_fixable"
+          }
+        },
+        {
+          "source": "github-inspector",
+          "resource_id": "acme/web",
+          "resource_type": "github_repository",
+          "message": "Dependabot vulnerability alerts are not enabled.",
+          "remediation": {
+            "summary": "Enable Dependabot alerts in repo Security settings.",
+            "ref": "grc-engineer://generate-implementation/vulnerability_management/github",
+            "effort_hours": 0.1,
+            "automation": "auto_fixable"
+          }
+        },
+        {
+          "source": "github-inspector",
+          "resource_id": "acme/api",
+          "resource_type": "github_repository",
+          "message": "Dependabot vulnerability alerts are not enabled.",
+          "remediation": {
+            "summary": "Enable Dependabot alerts in repo Security settings.",
+            "ref": "grc-engineer://generate-implementation/vulnerability_management/github",
+            "effort_hours": 0.1,
+            "automation": "auto_fixable"
+          }
+        },
+        {
+          "source": "github-inspector",
+          "resource_id": "acme/web",
+          "resource_type": "github_repository",
+          "message": "Dependabot vulnerability alerts are not enabled.",
+          "remediation": {
+            "summary": "Enable Dependabot alerts in repo Security settings.",
+            "ref": "grc-engineer://generate-implementation/vulnerability_management/github",
+            "effort_hours": 0.1,
+            "automation": "auto_fixable"
+          }
+        },
+        {
+          "source": "github-inspector",
+          "resource_id": "acme/api",
+          "resource_type": "github_repository",
+          "message": "Dependabot vulnerability alerts are not enabled.",
+          "remediation": {
+            "summary": "Enable Dependabot alerts in repo Security settings.",
+            "ref": "grc-engineer://generate-implementation/vulnerability_management/github",
+            "effort_hours": 0.1,
+            "automation": "auto_fixable"
+          }
+        },
+        {
+          "source": "github-inspector",
+          "resource_id": "acme/web",
+          "resource_type": "github_repository",
+          "message": "Dependabot vulnerability alerts are not enabled.",
+          "remediation": {
+            "summary": "Enable Dependabot alerts in repo Security settings.",
+            "ref": "grc-engineer://generate-implementation/vulnerability_management/github",
+            "effort_hours": 0.1,
+            "automation": "auto_fixable"
+          }
+        }
+      ],
+      "passing_resources_count": 0,
+      "inconclusive_resources_count": 0,
+      "total_resources_evaluated": 8
+    }
+  ],
+  "tier3": [],
+  "passes": [],
+  "inconclusive": [
+    {
+      "scf_id": "CHG-02",
+      "title": "Configuration Change Control",
+      "family": "CHG",
+      "status": "inconclusive",
+      "severity": "medium",
+      "frameworks": {
+        "general-aicpa-tsc-2017": [
+          "CC2.2-POF13",
+          "CC3.4",
+          "CC3.4-POF4",
+          "CC6.8-POF3",
+          "CC8.1",
+          "CC8.1-POF1",
+          "CC8.1-POF2",
+          "CC8.1-POF3",
+          "CC8.1-POF4",
+          "CC8.1-POF5",
+          "CC8.1-POF6",
+          "CC8.1-POF7",
+          "CC8.1-POF8",
+          "CC8.1-POF9",
+          "CC8.1-POF10",
+          "CC8.1-POF11",
+          "CC8.1-POF13",
+          "CC8.1-POF14"
+        ],
+        "general-iso-27002-2022": [
+          "8.19",
+          "8.32"
+        ]
+      },
+      "failing_resources": [],
+      "passing_resources_count": 0,
+      "inconclusive_resources_count": 8,
+      "total_resources_evaluated": 8
+    },
+    {
+      "scf_id": "MON-01",
+      "title": "Continuous Monitoring",
+      "family": "MON",
+      "status": "inconclusive",
+      "severity": "low",
+      "frameworks": {
+        "general-aicpa-tsc-2017": [
+          "CC7.2",
+          "CC7.2-POF1"
+        ],
+        "general-iso-27002-2022": [
+          "8.15",
+          "8.16"
+        ]
+      },
+      "failing_resources": [],
+      "passing_resources_count": 0,
+      "inconclusive_resources_count": 8,
+      "total_resources_evaluated": 8
+    },
+    {
+      "scf_id": "IAO-04",
+      "title": "Threat Analysis & Flaw Remediation During Development",
+      "family": "IAO",
+      "status": "inconclusive",
+      "severity": "low",
+      "frameworks": {
+        "general-aicpa-tsc-2017": [
+          "CC4.1",
+          "CC4.2"
+        ],
+        "general-iso-27002-2022": [
+          "8.25"
+        ]
+      },
+      "failing_resources": [],
+      "passing_resources_count": 0,
+      "inconclusive_resources_count": 8,
+      "total_resources_evaluated": 8
+    }
+  ]
+}

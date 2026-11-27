@@ -50,6 +50,8 @@ Parse `$ARGUMENTS`. Accept zero or one positional argument: the folder path. Def
    - planned owner items → `/audit-ready:request`
    - files in `_inbox/` → `/audit-ready:inbox`
    - collected evidence but no assessments → `/audit-ready:audit`
+   - inspector runs in `~/.cache/claude-grc/findings/` not yet filed → `/audit-ready:collect import`
+   - an approved internal audit report → `/audit-ready:package <auditor fingerprint>` when the auditor asks for evidence
 
 ## Output
 

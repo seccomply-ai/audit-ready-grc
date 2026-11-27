@@ -155,15 +155,18 @@ Use the **worst** verdict, not the best. A requirement is only as ready as its w
 
 Audit Ready works the same without these. When present, use them:
 
-1. Read `~/.claude/plugins/installed_plugins.json` (if it exists) and look for plugin keys starting with:
-   - `grc-engineer@`;
-   - any `base_plugin` value from `framework-reference/frameworks.csv` followed by `@`, such as `soc2@`, `pci-dss@` or `gdpr@`. Only report the ones for frameworks in scope, or for frameworks the profile suggests;
-   - the inspectors `aws-inspector@`, `github-inspector@`, `gcp-inspector@`, `azure-inspector@`, `okta-inspector@`.
-2. Check for cached inspector Findings at `~/.cache/claude-grc/findings/<source>/*.json` (Finding schema v1: `resource`, `evaluations[{control_framework, control_id, status}]`, `collected_at`).
+1. Read `~/.claude/plugins/installed_plugins.json` (if it exists). Each key is `<plugin>@<marketplace>` with a list of installs carrying `installPath` and `version`. Look for:
+   - `grc-engineer@` (gap assessment, evidence packager);
+   - any `base_plugin` value from `framework-reference/frameworks.csv` followed by `@`, such as `soc2@`, `pci-dss@` or `eu-nis2@`. Only report the ones for frameworks in scope, or for frameworks the profile suggests;
+   - inspectors: any key ending in `-inspector@` (`aws-`, `github-`, `gcp-`, `azure-`, `okta-`, `wiz-`, `tenable-`, ...).
+2. Check the inspector cache: `~/.cache/claude-grc/runs.log` (one JSON line per run) and `~/.cache/claude-grc/findings/<source>/<run_id>.json`. A Findings file is a JSON array of Finding v1 documents: `source`, `run_id`, `collected_at`, `resource{type,id}` and `evaluations[{control_framework, control_id, status (pass|fail|inconclusive|not_applicable|skipped), severity, message, remediation{summary}}]`. Control ids are SCF ids.
 3. If found:
-   - Framework plugins: offer their `/<base_plugin>:evidence-checklist` as a second opinion during `/audit-ready:evidence-plan`, and their specialist applicability commands during `/audit-ready:scope` (see `framework-reference/scf.md`).
-   - SCF cache: `~/.cache/claude-grc/scf/<version>/` is shared. Reuse any crosswalks claude-grc-engineering has already downloaded.
-   - Inspector findings: `/audit-ready:collect import` can file them as evidence (method `import`), copied unchanged, hashed and indexed like any other artifact.
+   - **Inspector runs:** `/audit-ready:collect import` files them as evidence, mapped to requirements through `scf_ids`. `/audit-ready:collect import gap` runs grc-engineer's gap assessment over them and files its requirement-level report.
+   - **Audit:** `/audit-ready:audit` turns failing evaluations in imported runs into proposed findings (see `internal-audit-method/references/severity.md`, "Inspector results").
+   - **Status:** `/audit-ready:status` shows each inspector source's last run and flags runs older than 30 days.
+   - **Hand-off:** `/audit-ready:package` uses grc-engineer's `package-evidence.py` to build an encrypted evidence bundle for the auditor.
+   - **Framework plugins:** offer their `/<base_plugin>:evidence-checklist` as a second opinion during `/audit-ready:evidence-plan`, and their specialist commands during `/audit-ready:scope` (see `framework-reference/SKILL.md`, "Framework plugins").
+   - **SCF cache:** `~/.cache/claude-grc/scf/<version>/` is shared. Reuse any crosswalks claude-grc-engineering has already downloaded.
    - `grc-engineer/config/control-crosswalk.yaml` can help cross-map SOC 2 and ISO ids. It uses ISO 27001:2013 Annex A ids (A.9.x); translate to 2022 ids before writing.
 4. If nothing is found, say nothing about it beyond one line in `/audit-ready:start`.
 

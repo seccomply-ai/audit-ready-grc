@@ -32,11 +32,12 @@ Parse `$ARGUMENTS`.
 ## Steps (per function; for `all`, run Engineering, IT, HR, Legal, Leadership in turn)
 
 1. **Select requirements.** Take the applicable and inherited rows in `applicability.csv` whose catalog `function` matches. Use the shipped catalog for curated frameworks and `compliance/catalogs/<key>.csv` for SCF-backed ones. For SCF-backed rows, the "catalog text" passed to the agents is the SCF control titles, with a note to judge against the requirement id's intent and to flag where the official wording should be checked. If assessments for this function already exist, ask whether to re-audit (which adds new rows dated today) or skip.
-2. **Select evidence.** Take the `index.csv` rows whose `requirements` include any of these requirements. Build pairs of evidence × requirement.
+2. **Select evidence.** Take the `index.csv` rows whose `requirements` include any of these requirements. Build pairs of evidence × requirement. Imported claude-grc-engineering runs and gap reports are included like any other file. If an inspector source in `~/.cache/claude-grc/runs.log` has a newer run than the one filed, say so and suggest `/audit-ready:collect import` first.
 3. **Review the evidence in batches.** Split the pairs into batches of about 10 files and launch the `audit-ready:evidence-reviewer` agents, running batches in parallel where possible. Pass each one:
    - the skill path `${CLAUDE_PLUGIN_ROOT}/skills/internal-audit-method/`;
    - the period and the systems from `scope.md`;
-   - the items in its batch, with their index rows and catalog text.
+   - the items in its batch, with their index rows and catalog text;
+   - for imported inspector runs or gap reports, the instruction to apply "Inspector results" in `references/severity.md`.
 
    Collect the JSON each one returns. If a result isn't valid JSON, re-run that batch once.
 4. **Audit the function.** Launch the `audit-ready:internal-auditor` agent with:
