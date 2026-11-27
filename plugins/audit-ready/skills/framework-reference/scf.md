@@ -166,7 +166,21 @@ Every curated catalog row and every generated row carries `scf_ids`. Every playb
 ## Known SCF data issues
 
 - **ISO 27002:2022 crosswalk:** ids ending in 0 collapsed into their prefix, because they were stored as numbers. `5.10` merges into `5.1`, and the same happens to 5.20, 5.30, 7.10, 8.10, 8.20 and 8.30. In the curated `iso27001.csv`, both controls of each pair carry the shared, over-inclusive SCF list.
-- **Unmapped rows:** some curated rows have no SCF mapping, so their `scf_ids` are empty. Evidence for them is planned directly, not by SCF dedupe. They are: DPDP §16, §17 and Rule 15; GDPR Articles 6, 22, 26 and 47; NIS2 Articles 20.1, 20.2 and 24.
+- **Hand-mapped rows:** the SCF crosswalks leave some curated rows unmapped. Audit Ready maps them by hand, and `tools/build_scf_data.py` keeps and validates those ids:
+
+  | Row | SCF ids |
+  |---|---|
+  | DPDP §16, Rule 15 (transfers outside India) | CLD-09, DCH-25 |
+  | GDPR Art 6 (lawful basis) | PRI-02.1, PRI-03, PRI-04.1 |
+  | GDPR Art 22 (automated decisions) | PRI-19, PRI-19.2, PRI-19.3 |
+  | GDPR Art 26 (joint controllers) | PRI-07.2 |
+  | GDPR Art 47 (binding corporate rules) | DCH-25, PRI-01.5 |
+  | NIS2 Art 20.1 (management approval and oversight) | GOV-01.1, GOV-01.2, RSK-13 |
+  | NIS2 Art 20.2 (management training) | SAT-03 |
+  | NIS2 Art 24 (certified ICT products) | TDA-02.2, TDA-03 |
+
+  CERT-In, RBI and SEBI CSCRF have no SCF crosswalk, so all their rows are hand-mapped.
+- **Intentionally unmapped:** DPDP §17 (exemptions) has empty `scf_ids`. An exemption is a legal condition, not a control, so evidence for it is a documented legal assessment, planned directly.
 - **No SCF crosswalk:** CERT-In, RBI and SEBI CSCRF have none. Their `scf_ids` are hand-mapped by Audit Ready and validated by `tools/build_scf_data.py`.
 - **Uneven coverage:** SCF links from playbook rows reach some frameworks well (PCI DSS) and others poorly (GDPR maps mostly to privacy controls). Curated catalogs therefore also get hand-mapped keys in the playbooks' `Requirements` column. SCF links only add to those.
 
