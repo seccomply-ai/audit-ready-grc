@@ -36,7 +36,7 @@ HEADERS = {
 }
 CATALOG_HEADER = "framework,req_id,title,summary,mandatory,function,typical_evidence,category,scf_ids"
 EXPECTED_ROWS = {"soc2": 61, "iso27001": 118, "dpdp": 32, "gdpr": 38, "pci-dss": 71, "hipaa-security": 69,
-                 "nist-csf-2.0": 106, "nis2": 35, "dora": 28, "cert-in": 7, "rbi": 26, "sebi-cscrf": 21}
+                 "nist-csf-2.0": 106, "nis2": 35, "dora": 28, "iso42001": 65, "cert-in": 7, "rbi": 26, "sebi-cscrf": 21}
 FUNCTIONS = {"Engineering", "IT", "HR", "Legal", "Leadership"}
 INDEX_TYPES = {"config", "population", "log", "policy", "procedure", "record", "report", "screenshot", "other"}
 FINDING_STATUS = {"open", "in-progress", "accepted", "closed"}
@@ -143,6 +143,14 @@ def check_catalogs(cats):
         for r in rows:
             if not r["req_id"].startswith("A.") and r["mandatory"] != "yes":
                 err("catalogs", f"iso27001:{r['req_id']}: clauses 4-10 must be mandatory")
+    if "iso42001" in cats:
+        rows = cats["iso42001"][1]
+        if sum(1 for r in rows if r["req_id"].startswith("A.")) != 38:
+            err("catalogs", "iso42001: Annex A must have 38 controls")
+        for r in rows:
+            clause = not r["req_id"].startswith("A.")
+            if (r["mandatory"] == "yes") != clause:
+                err("catalogs", f"iso42001:{r['req_id']}: clauses 4-10 mandatory, Annex A selected via SoA")
     if "nist-csf-2.0" in cats:
         for r in cats["nist-csf-2.0"][1]:
             if not re.match(r"^(GV|ID|PR|DE|RS|RC)\.[A-Z]{2}-\d{2}$", r["req_id"]):

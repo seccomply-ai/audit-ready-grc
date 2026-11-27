@@ -4,7 +4,7 @@
 
 **Your GRC assistant inside Claude Code: scope it, collect it, audit it.**
 
-Audit Ready is a Claude Code plugin for GRC engineers, internal auditors and consultants getting a company ready for **SOC 2**, **ISO 27001**, **DPDP**, **GDPR**, **PCI DSS**, **HIPAA**, **NIST CSF**, **NIS2**, **DORA** and India's **CERT-In**, **RBI** and **SEBI** requirements. It can also scope about 240 more frameworks through the SCF. It does the slow work a consultant or junior analyst would do: it reads the business, maps what applies, pulls evidence from systems, and tests it before the auditor does. You stay in charge, and every decision is a proposal you approve.
+Audit Ready is a Claude Code plugin for GRC engineers, internal auditors and consultants getting a company ready for **SOC 2**, **ISO 27001**, **DPDP**, **GDPR**, **PCI DSS**, **HIPAA**, **NIST CSF**, **NIS2**, **DORA**, **ISO 42001** (AI management) and India's **CERT-In**, **RBI** and **SEBI** requirements. It can also scope about 240 more frameworks through the SCF. It does the slow work a consultant or junior analyst would do: it reads the business, maps what applies, pulls evidence from systems, and tests it before the auditor does. You stay in charge, and every decision is a proposal you approve.
 
 It runs no database, server or app. It is made of commands, skills and agents, and everything it produces is a plain Markdown or CSV file in `compliance/` that you can open, edit, and hand to an auditor.
 
@@ -41,8 +41,8 @@ To offer the plugin automatically to everyone working in a project, add this to 
 
 | Tier | Frameworks | What you get |
 |---|---|---|
-| Curated (12) | SOC 2, ISO 27001:2022, DPDP Act 2023 + Rules 2025, GDPR, PCI DSS 4.0.1, HIPAA Security + Breach Notification Rules, NIST CSF 2.0, NIS2 (+ IR 2024/2690), DORA, CERT-In Directions, RBI (IT governance, IT outsourcing, payment data localisation), SEBI CSCRF | Hand-written catalogs: paraphrased summaries, mandatory flags, owning function, typical evidence, framework-specific applicability rules, and hand-mapped CLI evidence |
-| SCF-backed (240) | Every other framework mapped by the [Secure Controls Framework](https://securecontrolsframework.com) (data read from the GRC Engineering Club's community SCF API mirror, not an official SCF release), including NIST 800-53, CIS v8.1, CMMC, FedRAMP, NYDFS, CCPA, MAS TRM, Essential 8, APRA CPS 234 | A catalog generated at scope time from the SCF crosswalk, the same data source claude-grc-engineering uses: real requirement ids with SCF wording, and no mandatory flags |
+| Curated (13) | SOC 2, ISO 27001:2022, ISO/IEC 42001:2023, DPDP Act 2023 + Rules 2025, GDPR, PCI DSS 4.0.1, HIPAA Security + Breach Notification Rules, NIST CSF 2.0, NIS2 (+ IR 2024/2690), DORA, CERT-In Directions, RBI (IT governance, IT outsourcing, payment data localisation), SEBI CSCRF | Hand-written catalogs: paraphrased summaries, mandatory flags, owning function, typical evidence, framework-specific applicability rules, and hand-mapped CLI evidence |
+| SCF-backed (239) | Every other framework mapped by the [Secure Controls Framework](https://securecontrolsframework.com) (data read from the GRC Engineering Club's community SCF API mirror, not an official SCF release), including NIST 800-53, CIS v8.1, CMMC, FedRAMP, NYDFS, CCPA, MAS TRM, Essential 8, APRA CPS 234 | A catalog generated at scope time from the SCF crosswalk, the same data source claude-grc-engineering uses: real requirement ids with SCF wording, and no mandatory flags |
 
 RBI, SEBI and CERT-In catalogs use thematic ids, and these regulators revise their circulars often. Verify the clause references against the latest circulars before an audit.
 
@@ -99,7 +99,7 @@ The CSV columns are fixed by templates. Readiness is always computed from `appli
 
 | Part | Contents |
 |---|---|
-| Skills | `grc-assistant` (rules, folder format, templates, hashing, redaction, readiness formula), `business-discovery`, `framework-reference` (registry of 252 frameworks; 12 curated catalogs with 612 requirements; SCF-backed catalogs generated on demand), `evidence-playbooks` (gh, aws, gam, gcloud, az, each row tagged with SCF ids), `internal-audit-method` (rubric, sampling, severity, report) |
+| Skills | `grc-assistant` (rules, folder format, templates, hashing, redaction, readiness formula), `business-discovery`, `framework-reference` (registry of 252 frameworks; 13 curated catalogs with 677 requirements; SCF-backed catalogs generated on demand), `evidence-playbooks` (gh, aws, gam, gcloud, az, each row tagged with SCF ids), `internal-audit-method` (rubric, sampling, severity, report) |
 | Agents | `site-researcher`, `evidence-reviewer`, `internal-auditor` |
 | Examples | `examples/acme-saas` (a complete sample folder), plus scoping test briefs with expected outcomes: `kirana-pay`, `ledgerloop`, `carecadence` |
 | Tests | `tests/validate_repo.py`, `tests/check_scope_result.py`, CI in `.github/workflows/validate.yml` |

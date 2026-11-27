@@ -53,7 +53,7 @@ jobs:
           curl -sSf "$B/crosswalks.json" -o "$C/crosswalks.json"
           for id in general-aicpa-tsc-2017 general-iso-27001-2022 general-iso-27002-2022 apac-ind-dpdpa-2023 \
                     emea-eu-gdpr-2016 general-pci-dss-4-0-1 usa-federal-law-hipaa-security-rule-2013 \
-                    general-nist-csf-2-0 emea-eu-nis2-2022 emea-eu-nis2-annex-2024 emea-eu-dora-2023; do
+                    general-nist-csf-2-0 emea-eu-nis2-2022 emea-eu-nis2-annex-2024 emea-eu-dora-2023 general-iso-42001-2023; do
             curl -sSf "$B/crosswalks/$id.json" -o "$C/crosswalks/$id.json"
           done
       - name: Fetch claude-grc-engineering plugin metadata (pinned)

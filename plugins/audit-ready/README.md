@@ -1,6 +1,6 @@
 # Audit Ready plugin
 
-Audit Ready is a GRC assistant inside Claude Code. Scope it, collect it, audit it. It ships curated catalogs for SOC 2, ISO 27001:2022, GDPR, PCI DSS 4.0.1, the HIPAA Security and Breach Notification Rules, NIST CSF 2.0, NIS2, DORA and India's DPDP Act, CERT-In Directions, RBI and SEBI CSCRF, and covers about 240 more frameworks through SCF crosswalks.
+Audit Ready is a GRC assistant inside Claude Code. Scope it, collect it, audit it. It ships curated catalogs for SOC 2, ISO 27001:2022, GDPR, PCI DSS 4.0.1, the HIPAA Security and Breach Notification Rules, NIST CSF 2.0, NIS2, DORA, ISO/IEC 42001 (AI management) and India's DPDP Act, CERT-In Directions, RBI and SEBI CSCRF, and covers about 240 more frameworks through SCF crosswalks.
 
 - **Scoping.** `/audit-ready:scope <url>` reads the company website, asks only what the site can't show, recommends frameworks, and drafts a Statement of Applicability and a scoping memo.
 - **Evidence collection.**

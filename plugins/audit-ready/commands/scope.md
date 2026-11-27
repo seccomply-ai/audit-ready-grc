@@ -56,7 +56,7 @@ Include:
 
 The user may also name any other framework. Look it up in `frameworks.csv`:
 - Not in the registry: say it isn't supported and offer the closest alternative. Never invent requirement ids.
-- For curated frameworks, ask the framework-specific questions (Q16–Q23 in the question bank) before drafting applicability, then apply "Framework-specific applicability" in framework-reference.
+- For curated frameworks, ask the framework-specific questions (Q16–Q24 in the question bank) before drafting applicability, then apply "Framework-specific applicability" in framework-reference.
 - Several matches (for example CIS IG1, IG2 or IG3): ask which one.
 
 The user picks. Record the choice.

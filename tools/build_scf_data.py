@@ -38,6 +38,7 @@ CURATED = {
     "nist-csf-2.0": ("general-nist-csf-2-0", "nist-csf-20", "", "Curated. NIST CSF 2.0 (Feb 2024), 106 subcategories", ("under", "general-nist-csf-2-0")),
     "nis2": ("emea-eu-nis2-2022", "eu-nis2", "", "Curated. NIS2 Directive (EU) 2022/2555 Arts 20, 21, 23 + Implementing Regulation (EU) 2024/2690 annex (IR-*)", ("nis2",)),
     "dora": ("emea-eu-dora-2023", "dora", "", "Curated. DORA Regulation (EU) 2022/2554, article level", ("under", "emea-eu-dora-2023")),
+    "iso42001": ("general-iso-42001-2023", "", "", "Curated. ISO/IEC 42001:2023 AI management system: clauses 4-10 + Annex A (38 controls)", ("under", "general-iso-42001-2023")),
     "cert-in": ("", "", "India - CERT-In Directions under Section 70B(6) of the IT Act (28 Apr 2022)", "Curated. No SCF crosswalk; scf_ids hand-mapped by Audit Ready", ("manual",)),
     "rbi": ("", "", "India - RBI IT Governance Master Direction (2023), IT Outsourcing Master Direction (2023), payment data storage (2018)", "Curated. No SCF crosswalk; scf_ids hand-mapped by Audit Ready", ("manual",)),
     "sebi-cscrf": ("", "", "India - SEBI Cybersecurity and Cyber Resilience Framework (CSCRF, Aug 2024)", "Curated. No SCF crosswalk; scf_ids hand-mapped by Audit Ready", ("manual",)),

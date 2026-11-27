@@ -1,6 +1,6 @@
 ---
 name: framework-reference
-description: Framework registry (about 250 frameworks) and requirement catalogs. Curated catalogs for SOC 2, ISO 27001:2022, India DPDP, GDPR, PCI DSS 4.0.1, HIPAA Security Rule, NIST CSF 2.0, NIS2, DORA, CERT-In Directions, RBI (IT governance, IT outsourcing, payment data localisation) and SEBI CSCRF. On-demand SCF-backed catalogs for every other SCF-mapped framework (NIST 800-53, CIS, CMMC, FedRAMP, NYDFS, CCPA, ...). Use when recommending frameworks, drafting a Statement of Applicability, building an evidence plan, cross-mapping evidence, or auditing a requirement.
+description: Framework registry (about 250 frameworks) and requirement catalogs. Curated catalogs for SOC 2, ISO 27001:2022, India DPDP, GDPR, PCI DSS 4.0.1, HIPAA Security Rule, NIST CSF 2.0, NIS2, DORA, ISO/IEC 42001:2023 (AI management), CERT-In Directions, RBI (IT governance, IT outsourcing, payment data localisation) and SEBI CSCRF. On-demand SCF-backed catalogs for every other SCF-mapped framework (NIST 800-53, CIS, CMMC, FedRAMP, NYDFS, CCPA, ...). Use when recommending frameworks, drafting a Statement of Applicability, building an evidence plan, cross-mapping evidence, or auditing a requirement.
 allowed-tools: Read, Glob, Grep, Write, Bash, WebFetch
 ---
 
@@ -33,6 +33,7 @@ allowed-tools: Read, Glob, Grep, Write, Bash, WebFetch
 | `nist-csf-2.0` | `catalogs/nist-csf-2.0.csv` | 106 | NIST CSWP 29, CSF 2.0 (Feb 2024) | Subcategory (`PR.AA-03`) |
 | `nis2` | `catalogs/nis2.csv` | 35 | Directive (EU) 2022/2555 Arts 20, 21, 23, 24 + Implementing Regulation (EU) 2024/2690 annex | Article paragraph; `IR-1`–`IR-13` = annex sections |
 | `dora` | `catalogs/dora.csv` | 28 | Regulation (EU) 2022/2554 (applies from 17 Jan 2025) + RTS on incident reporting | Article (Arts 28 and 30 split) |
+| `iso42001` | `catalogs/iso42001.csv` | 65 | ISO/IEC 42001:2023 (+ Amd 1:2024 climate note) | Clauses 4.1–10.2 (27) + Annex A (38) |
 | `cert-in` | `catalogs/cert-in.csv` | 7 | CERT-In Directions under s.70B(6) IT Act, 28 Apr 2022 (+ FAQs) | Obligation (`CERTIN-1`–`CERTIN-7`) |
 | `rbi` | `catalogs/rbi.csv` | 26 | RBI MD on IT Governance, Risk, Controls and Assurance Practices (Nov 2023); RBI MD on Outsourcing of IT Services (Apr 2023); Storage of Payment System Data (Apr 2018) + FAQs | Thematic (`RBI-ITG-*`, `RBI-OUT-*`, `RBI-PDL-*`) |
 | `sebi-cscrf` | `catalogs/sebi-cscrf.csv` | 21 | SEBI Cybersecurity and Cyber Resilience Framework (Aug 2024) and its clarifications | Thematic by function (`SEBI-GV-*` … `SEBI-AU-*`) |
@@ -62,6 +63,7 @@ Read catalogs with Grep for single ids (`^pci-dss,8.4,`). Read the whole file on
 | EU essential or important entity (Annex I or II sector and size), or a digital provider listed in IR 2024/2690 | **NIS2** (national transposition applies) |
 | RBI-regulated entity, or IT service provider or payment system participant for one | **RBI** |
 | SEBI-regulated entity (broker, depository participant, AMC, MII, ...) or its technology vendor | **SEBI CSCRF** |
+| Builds, trains, fine-tunes or deploys AI/ML in its product, or customers ask about responsible AI or an AI management system | **ISO/IEC 42001:2023**. Usually alongside ISO 27001 (shared clauses 4–10). Record the AI role (provider, producer, customer or user) in `scope.md` |
 | Needs a general baseline with no certification, or a US enterprise or government buyer asks for it | **NIST CSF 2.0** |
 | Both SOC 2 and ISO asked for | Both. Build one evidence plan; most evidence overlaps |
 | US federal or defence buyers | **NIST 800-53** / **FedRAMP** / **CMMC** (SCF-backed) |
@@ -109,6 +111,7 @@ State the reason for each category you include or exclude.
 | NIST CSF 2.0 | Target tier and profile? | Nothing is mandatory. Agree a target profile: propose `yes` for all subcategories, and `no` only with a reason the user accepts. Record the target tier (1–4) in `scope.md` |
 | NIS2 | Sector (Annex I or II), size, essential or important, which Member States? Listed digital provider? | Arts 20, 21 and 23 apply to every in-scope entity. `IR-*` rows apply only to the digital providers listed in IR 2024/2690 (DNS, TLD, cloud, data centre, CDN, MSP, MSSP, online marketplaces, search engines, social networks, trust services); otherwise mark them `no`. If the company is only a supplier to an NIS2 entity, scope Art 21.2(d) and 21.3 obligations as contractual flow-down |
 | DORA | Financial entity, ICT third-party provider, or designated critical ICT provider? Do your services support the customer's critical or important functions? | **Financial entity:** all rows apply. Art 16 replaces Arts 5–15 for entities on the simplified regime, Art 23 only for payment, credit and e-money institutions, and Arts 26–27 only if designated for TLPT. **ICT supplier:** mark Arts 5–27 `no` with reason "not a financial entity; obligations flow down via customer contracts". Keep Arts 28.4, 30.2 and 30.3 (what customers will require), plus any Art 9–12 controls the customer contracts require |
+| ISO 42001 | Which AI systems are in scope, and is the company an AI provider, producer, customer (user) or several? | Clauses 4–10 are mandatory. Annex A is selected through the statement of applicability (6.1.3) like ISO 27001: propose `yes` and exclude only with a reason. Life cycle and data controls (A.6, A.7) are usually `no` for an AI **user** only (one that buys AI services and builds none), with reason "AI user only: no AI systems developed"; keep A.9 (use) and A.10 (suppliers) for users. Impact assessment (6.1.4, 8.4, A.5) applies to every role |
 | CERT-In | Provider type (data centre, VPS, cloud, VPN, VASP)? | CERTIN-1 to CERTIN-5 are mandatory for bodies corporate operating in India. CERTIN-6 applies only to data centre, VPS, cloud and VPN providers. CERTIN-7 applies only to VASPs |
 | RBI | Regulated entity (bank, NBFC, payment system operator, ...) or a vendor to one? | **RE:** all `RBI-ITG-*` and `RBI-OUT-*` rows apply (in proportion to the RE category); `RBI-PDL-*` applies if it is a payment system provider or participant. **Vendor:** `RBI-OUT-03` to `RBI-OUT-07` apply as contractual flow-down, plus `RBI-PDL-*` if it stores or processes payment system data for a payment system operator; mark `RBI-ITG-*` rows `no` unless the RE's contract imposes them |
 | SEBI CSCRF | RE category (MII, Qualified, Mid-size, Small-size, Self-certification) or vendor? | The category decides which standards apply and how often (VAPT, audit, SOC model, CCI). SEBI-ID-02 (CCI) applies only to MIIs and Qualified REs. A vendor scopes SEBI-GV-04 and SEBI-GV-05 obligations through the RE's contract |
@@ -156,6 +159,7 @@ One evidence artifact often covers several requirements. Playbook rows carry han
 | Vendors | CC9.2 | A.5.19–A.5.22 | DPDP-8-2 | 12.8 | 164.308(b) | GV.SC-* | GDPR 28; DORA 28–30; RBI-OUT-*; NIS2 21.2(d) |
 | Data location | | | DPDP-16 | | | | RBI-PDL-01; SEBI-PR-02; CERTIN-5; GDPR 44–46 |
 | Risk assessment | CC3.1–CC3.4 | 6.1.2, 8.2 | | 12.3 | 164.308(a)(1)(ii)(A) | ID.RA-* | NIS2 21.2(a); DORA 8 |
+| AI governance | | 5.2, 6.1.2 | | | | GV.OC, GV.RM | ISO 42001 5.2, 6.1.2–6.1.4, A.5 (management system shares clauses 4–10 with ISO 27001: one internal audit and management review can cover both) |
 | Training | CC2.2 | A.6.3, 7.3 | | 12.6 | 164.308(a)(5) | PR.AT-01 | NIS2 20.2, 21.2(g); DORA 13 |
 
 For any other pair of frameworks, the general rule is that two requirements may overlap when their `scf_ids` intersect. Treat that as a hint the user confirms (see `scf.md`).

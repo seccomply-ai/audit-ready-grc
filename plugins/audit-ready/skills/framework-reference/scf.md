@@ -1,6 +1,6 @@
 # SCF-backed frameworks
 
-Audit Ready ships curated catalogs for 12 frameworks (`tier=curated` in `frameworks.csv`). Every other framework that the Secure Controls Framework (SCF) maps (`tier=scf`, 240 of them) is built on demand from the SCF crosswalks. claude-grc-engineering uses the same crosswalks.
+Audit Ready ships curated catalogs for 13 frameworks (`tier=curated` in `frameworks.csv`). Every other framework that the Secure Controls Framework (SCF) maps (`tier=scf`, 239 of them) is built on demand from the SCF crosswalks. claude-grc-engineering uses the same crosswalks.
 
 - **Source:** SCF data as republished by the GRC Engineering Club's **community API mirror** at `https://grcengclub.github.io/scf-api/api/`. This is a third-party mirror, not an official release of the Secure Controls Framework Council (`securecontrolsframework.com`). Say so when a user asks where the data comes from, and cite the SCF version from the mirror's `summary.json` (`scf_version`, for example `2026.1`).
 - **Licence:** SCF data is CC BY-ND 4.0. Audit Ready never ships SCF text. It fetches at run time into the user's own cache, and writes generated catalogs only into the user's `compliance/catalogs/` folder, with attribution. Do not paste SCF descriptions into committed docs.

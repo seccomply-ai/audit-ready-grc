@@ -8,6 +8,7 @@ hipaa-security,HIPAA Security Rule (2013),curated,usa-federal-law-hipaa-security
 nist-csf-2.0,NIST Cybersecurity Framework (v2.0),curated,general-nist-csf-2-0,Global,nist-csf-20,catalogs/nist-csf-2.0.csv,"Curated. NIST CSF 2.0 (Feb 2024), 106 subcategories"
 nis2,EU NIS2 Directive (2022),curated,emea-eu-nis2-2022,EMEA,eu-nis2,catalogs/nis2.csv,"Curated. NIS2 Directive (EU) 2022/2555 Arts 20, 21, 23 + Implementing Regulation (EU) 2024/2690 annex (IR-*)"
 dora,EU Digital Operational Resilience Act (DORA) (2023),curated,emea-eu-dora-2023,EMEA,dora,catalogs/dora.csv,"Curated. DORA Regulation (EU) 2022/2554, article level"
+iso42001,ISO 42001 (2023),curated,general-iso-42001-2023,Global,,catalogs/iso42001.csv,Curated. ISO/IEC 42001:2023 AI management system: clauses 4-10 + Annex A (38 controls)
 cert-in,India - CERT-In Directions under Section 70B(6) of the IT Act (28 Apr 2022),curated,,APAC,,catalogs/cert-in.csv,Curated. No SCF crosswalk; scf_ids hand-mapped by Audit Ready
 rbi,"India - RBI IT Governance Master Direction (2023), IT Outsourcing Master Direction (2023), payment data storage (2018)",curated,,APAC,,catalogs/rbi.csv,Curated. No SCF crosswalk; scf_ids hand-mapped by Audit Ready
 sebi-cscrf,"India - SEBI Cybersecurity and Cyber Resilience Framework (CSCRF, Aug 2024)",curated,,APAC,,catalogs/sebi-cscrf.csv,Curated. No SCF crosswalk; scf_ids hand-mapped by Audit Ready
@@ -131,7 +132,6 @@ general-iso-27701-2025,ISO 27701 (2025),scf,general-iso-27701-2025,Global,,gener
 general-iso-29100-2024,ISO 29100 (2024),scf,general-iso-29100-2024,Global,,generated,SCF-backed (11 requirement ids mapped)
 general-iso-31000-2018,ISO 31000 (2018),scf,general-iso-31000-2018,Global,,generated,SCF-backed (27 requirement ids mapped)
 general-iso-31010-2009,ISO 31010 (2009),scf,general-iso-31010-2009,Global,,generated,SCF-backed (32 requirement ids mapped)
-general-iso-42001-2023,ISO 42001 (2023),scf,general-iso-42001-2023,Global,,generated,SCF-backed (140 requirement ids mapped)
 general-mitre-att&ck-16-1,MITRE ATT&CK (v16.1),scf,general-mitre-att&ck-16-1,Global,,generated,SCF-backed (511 requirement ids mapped)
 general-mpa-csbp-5-3-1,Content Security Best Practices Common Guidelines (v5.3.1),scf,general-mpa-csbp-5-3-1,Global,,generated,SCF-backed (81 requirement ids mapped)
 general-naic-insurance-data-security-model-law-668-2017,Insurance Data Security Model Law 668 (2017),scf,general-naic-insurance-data-security-model-law-668-2017,Global,,generated,SCF-backed (85 requirement ids mapped)

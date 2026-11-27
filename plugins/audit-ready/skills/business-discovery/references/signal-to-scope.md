@@ -19,6 +19,7 @@ Each rule turns a profile fact into a scoping proposal. When you use a rule, cit
 | Operates in India (any company with ICT systems there) | CERT-In (`cert-in`): 6-hour incident reporting, 180-day logs kept in India, NTP sync, point of contact. Ask Q22 |
 | RBI-regulated entity, or a vendor or payment system participant for one | RBI (`rbi`). Ask Q23. Vendors get the outsourcing flow-down rows |
 | SEBI-regulated entity, or a technology vendor to one | SEBI CSCRF (`sebi-cscrf`). Ask Q23 for the RE category |
+| AI features in the product (models, LLM features, "AI-powered"), an AI or responsible-AI page, or ML roles on the careers page | ISO/IEC 42001 (`iso42001`). Ask Q24 for the AI role and the AI systems in scope |
 | The user names any other framework | Look it up in `framework-reference/frameworks.csv` |
 
 ## SOC 2 categories
