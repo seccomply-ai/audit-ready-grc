@@ -18,6 +18,10 @@
 
 CI (`.github/workflows/validate.yml`) runs `validate_repo.py`, markdownlint, and an informational SCF freshness check.
 
+## Full manual test
+
+`e2e-test-plan.md` is a step-by-step checklist for every command, the safety rules, the claude-grc-engineering integration and the evidence package.
+
 ## End-to-end scoping test
 
 Scoping is done by Claude, so its output varies from run to run. The `expected.csv` files hold the judgements that must not vary: which frameworks are in scope, and which key requirements are applicable.

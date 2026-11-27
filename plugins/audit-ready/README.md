@@ -13,4 +13,11 @@ Audit Ready is a GRC assistant inside Claude Code. Scope it, collect it, audit i
 - **Hand-off.** `/audit-ready:package <fingerprint>` builds an encrypted, hash-manifested evidence bundle for the auditor.
 - **claude-grc-engineering (optional).** Inspector runs and gap assessments are imported as evidence, and their failures become proposed findings.
 
-Start with `/audit-ready:start`. Everything the plugin produces is plain Markdown or CSV in `compliance/`. See the repository README for details, safety rules and examples.
+Install it from the marketplace:
+
+```
+/plugin marketplace add seccomply-ai/audit-ready-grc
+/plugin install audit-ready@seccomply
+```
+
+Then start with `/audit-ready:start`. Everything the plugin produces is plain Markdown or CSV in `compliance/`. See the [repository README](https://github.com/seccomply-ai/audit-ready-grc#readme) for workflows, safety rules and examples.

@@ -1,24 +1,91 @@
-# Audit Ready
+<p align="center">
+  <img src="assets/icon-128.png" alt="Audit Ready icon" width="96" height="96">
+</p>
 
-![Audit Ready icon](assets/icon-128.png)
+<h1 align="center">Audit Ready</h1>
 
-**Your GRC assistant inside Claude Code: scope it, collect it, audit it.**
+<p align="center"><b>Your GRC assistant inside Claude Code. Scope it, collect it, audit it.</b></p>
 
-Audit Ready is a Claude Code plugin for GRC engineers, internal auditors and consultants getting a company ready for **SOC 2**, **ISO 27001**, **DPDP**, **GDPR**, **PCI DSS**, **HIPAA**, **NIST CSF**, **NIS2**, **DORA**, **ISO 42001** (AI management) and India's **CERT-In**, **RBI** and **SEBI** requirements. It can also scope about 240 more frameworks through the SCF. It does the slow work a consultant or junior analyst would do: it reads the business, maps what applies, pulls evidence from systems, and tests it before the auditor does. You stay in charge, and every decision is a proposal you approve.
+<p align="center">
+  <a href="https://github.com/seccomply-ai/audit-ready-grc/actions/workflows/validate.yml"><img src="https://github.com/seccomply-ai/audit-ready-grc/actions/workflows/validate.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/seccomply-ai/audit-ready-grc/releases/latest"><img src="https://img.shields.io/github/v/release/seccomply-ai/audit-ready-grc?labelColor=171717&color=FF570A" alt="Latest release"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-1f6feb?labelColor=171717" alt="MIT license"></a>
+  <img src="https://img.shields.io/badge/Claude%20Code-plugin-FF570A?labelColor=171717" alt="Claude Code plugin">
+  <img src="https://img.shields.io/badge/frameworks-13%20curated%20%2B%20239%20via%20SCF-1f6feb?labelColor=171717" alt="Frameworks">
+</p>
 
-It runs no database, server or app. It is made of commands, skills and agents, and everything it produces is a plain Markdown or CSV file in `compliance/` that you can open, edit, and hand to an auditor.
+Audit Ready gets a company ready for its compliance audit from inside Claude Code. It reads the business, works out which frameworks and requirements apply, collects evidence from the systems you already use, and tests that evidence the way an external auditor would. That's the slow work a consultant or junior analyst usually does. You stay in charge: every decision is a proposal you approve.
 
-## Install
+There is no server, database or app. Audit Ready is made of commands, skills and agents, and everything it produces is a plain Markdown or CSV file in a `compliance/` folder that you can open, edit and hand to your auditor.
+
+**Curated frameworks:** SOC 2, ISO 27001, ISO 42001 (AI), GDPR, PCI DSS 4.0.1, HIPAA, NIST CSF 2.0, NIS2, DORA, and India's DPDP, CERT-In, RBI and SEBI CSCRF. **239 more** (NIST 800-53, CIS, CMMC, FedRAMP, NYDFS, CCPA, ...) through the Secure Controls Framework.
+
+> Not affiliated with Anthropic, the AICPA, ISO or any regulator. Outputs are readiness assessments, not certification or legal advice.
+
+## What it does
+
+| Pillar | What happens | Commands |
+|---|---|---|
+| **1. Scoping** | Reads the company website (every fact cites its source), asks only what the site can't show, recommends frameworks with reasons, and drafts the Statement of Applicability and a scoping memo | `start`, `scope` |
+| **2. Evidence collection** | Turns the scope into one deduplicated evidence plan, runs read-only `gh`, `aws`, `gam`, `gcloud` and `az` commands after you approve them, drafts requests to evidence owners, and files what they send back. Every file is redacted, hashed and indexed | `evidence-plan`, `collect`, `request`, `inbox` |
+| **3. Internal audit** | Audits one business function at a time with inquiry, inspection and sample testing; proposes verdicts and rated findings; writes the internal audit report after you approve | `audit` |
+| **Hand-off** | Shows readiness per framework computed from the files, and builds an encrypted, hash-verified evidence bundle for the auditor | `status`, `package` |
+
+```text
+company website + your answers
+        ↓
+profile.md · applicability.csv (SoA) · scope.md
+        ↓
+evidence-plan.csv
+        ↓
+read-only CLI collection · owner requests · _inbox · inspector imports
+        ↓  (redact · SHA-256 · index.csv)
+evidence-reviewer + internal-auditor agents
+        ↓
+assessments.csv · findings.csv · internal audit report
+        ↓
+/audit-ready:status   ·   /audit-ready:package → encrypted bundle for the auditor
+```
+
+## Install in 60 seconds
+
+Inside Claude Code:
 
 ```bash
-# in Claude Code
 /plugin marketplace add seccomply-ai/audit-ready-grc
 /plugin install audit-ready@seccomply
 ```
 
-The repository is private for now. Installing needs git access to `seccomply-ai/audit-ready-grc` (for example via `gh auth login`). Background auto-updates for a private marketplace also need a `GITHUB_TOKEN` with read access in your environment; otherwise, update manually with `/plugin marketplace update seccomply`.
+Restart Claude Code, then type `/audit-ready:` to see the nine commands.
 
-To offer the plugin automatically to everyone working in a project, add this to the project's `.claude/settings.json`:
+**First run without any credentials:** try it on the fictional sample company.
+
+```bash
+git clone https://github.com/seccomply-ai/audit-ready-grc
+mkdir ~/ar-demo && cp -r audit-ready-grc/examples/acme-saas/compliance ~/ar-demo/
+cd ~/ar-demo && claude
+```
+
+```bash
+/audit-ready:status                 # readiness computed from the sample files
+/audit-ready:audit Engineering      # a mock audit of one function
+```
+
+**First run on a real company:**
+
+```bash
+/audit-ready:start
+/audit-ready:scope https://your-company.example
+/audit-ready:evidence-plan
+/audit-ready:collect gh             # read-only; you approve every command first
+```
+
+Update later with `/plugin marketplace update seccomply`.
+
+<details>
+<summary><b>Team setup: offer the plugin to everyone in a project</b></summary>
+
+Add this to the project's `.claude/settings.json`:
 
 ```json
 {
@@ -29,63 +96,71 @@ To offer the plugin automatically to everyone working in a project, add this to 
 }
 ```
 
-[claude-grc-engineering](https://github.com/GRCEngClub/claude-grc-engineering) is optional, and Audit Ready works the same without it. When it is installed, Audit Ready uses it:
+</details>
 
-- **Inspector results become evidence.** `/audit-ready:collect import` files the newest `aws-`, `github-`, `gcp-`, `azure-`, `okta-` (and other) inspector runs, linked to requirements through their SCF ids. `/audit-ready:collect import gap` runs grc-engineer's gap assessment and files its requirement-level report.
-- **Failures become proposed findings.** `/audit-ready:audit` turns failing inspector checks into rated findings with the inspector's remediation as the starting fix.
-- **Stale data is flagged.** `/audit-ready:status` shows each inspector's last run.
-- **Encrypted hand-off.** `/audit-ready:package` builds a GPG-encrypted, hash-manifested bundle with grc-engineer's packager.
-- **Second opinions.** Framework plugins (`soc2`, `iso27001`, `pci-dss`, `gdpr`, `ind-dpdpa`, ...) are offered as cross-checks during scoping and planning.
+## Common workflows
+
+| Goal | Command |
+|---|---|
+| Set up the working folder and see where things stand | `/audit-ready:start` |
+| Scope a company and draft the Statement of Applicability | `/audit-ready:scope <url>` |
+| Add any SCF-mapped framework (NIST 800-53, CIS, CMMC, ...) | `/audit-ready:scope` and name the framework |
+| Plan evidence once for several frameworks | `/audit-ready:evidence-plan` |
+| Collect from GitHub, AWS, Google Workspace, GCP or Azure | `/audit-ready:collect gh` (or `aws`, `gam`, `gcloud`, `az`) |
+| Ask people for policies, HR records and other manual evidence | `/audit-ready:request [owner]` |
+| File what owners sent back | `/audit-ready:inbox` |
+| File claude-grc-engineering inspector results | `/audit-ready:collect import` |
+| Run grc-engineer's gap assessment and file it as evidence | `/audit-ready:collect import gap` |
+| Mock-audit a function (Engineering, IT, HR, Legal, Leadership) | `/audit-ready:audit <function>` |
+| Write the internal audit report | `/audit-ready:audit --report` |
+| See readiness per framework and the top open items | `/audit-ready:status` |
+| Give the auditor an encrypted, hash-verified evidence bundle | `/audit-ready:package <gpg fingerprint>` |
+
+Each command's full runbook is in [`plugins/audit-ready/commands/`](plugins/audit-ready/commands/).
 
 ## Frameworks
 
 | Tier | Frameworks | What you get |
 |---|---|---|
-| Curated (13) | SOC 2, ISO 27001:2022, ISO/IEC 42001:2023, DPDP Act 2023 + Rules 2025, GDPR, PCI DSS 4.0.1, HIPAA Security + Breach Notification Rules, NIST CSF 2.0, NIS2 (+ IR 2024/2690), DORA, CERT-In Directions, RBI (IT governance, IT outsourcing, payment data localisation), SEBI CSCRF | Hand-written catalogs: paraphrased summaries, mandatory flags, owning function, typical evidence, framework-specific applicability rules, and hand-mapped CLI evidence |
-| SCF-backed (239) | Every other framework mapped by the [Secure Controls Framework](https://securecontrolsframework.com) (data read from the GRC Engineering Club's community SCF API mirror, not an official SCF release), including NIST 800-53, CIS v8.1, CMMC, FedRAMP, NYDFS, CCPA, MAS TRM, Essential 8, APRA CPS 234 | A catalog generated at scope time from the SCF crosswalk, the same data source claude-grc-engineering uses: real requirement ids with SCF wording, and no mandatory flags |
+| **Curated (13)** | SOC 2 (TSC 2017), ISO 27001:2022, ISO/IEC 42001:2023, DPDP Act 2023 + Rules 2025, GDPR, PCI DSS 4.0.1, HIPAA Security + Breach Notification Rules, NIST CSF 2.0, NIS2 (+ IR 2024/2690), DORA, CERT-In Directions, RBI, SEBI CSCRF | Hand-written catalogs (677 requirements): paraphrased summaries, mandatory flags, owning function, typical evidence, framework-specific applicability rules, entity-derived locks, and hand-mapped CLI evidence |
+| **SCF-backed (239)** | Every other framework mapped by the [Secure Controls Framework](https://securecontrolsframework.com), including NIST 800-53, CIS v8.1, CMMC, FedRAMP, NYDFS, CCPA, MAS TRM, Essential 8 and APRA CPS 234 | A catalog generated when you scope it, from the SCF crosswalk: real requirement ids with SCF wording, and no mandatory flags |
 
-RBI, SEBI and CERT-In catalogs use thematic ids, with the official clause in each row. They were source-checked on 27 Nov 2026 (`docs/reviews/india-catalogs-2026-11.md`), but that is not legal sign-off, and these regulators revise their circulars often. RBI's 2023 master directions were replaced in 2025-26 by entity-specific directions, so confirm the current text before an audit.
+- **Cross-framework evidence.** Every catalog row and every playbook row carries SCF control ids, so one artifact can support requirements in several frameworks. Audit Ready proposes those links, and you confirm them.
+- **India catalogs.** RBI, SEBI and CERT-In use thematic ids, with the official clause in each row. They were [source-checked on 27 Nov 2026](docs/reviews/india-catalogs-2026-11.md), which is not legal sign-off. RBI's 2023 master directions were replaced in 2025–26 by entity-specific directions, so confirm the current text before an audit.
+- **SCF data** (CC BY-ND 4.0) comes from the GRC Engineering Club's community API mirror, not an official SCF release. It is downloaded at run time into `~/.cache/claude-grc/scf/<version>/` and never shipped in this repo.
 
-Every catalog row and every playbook row carries SCF control ids, so one artifact can support requirements in several frameworks. You confirm each such link.
+## Works with claude-grc-engineering
 
-SCF data is CC BY-ND 4.0. It is downloaded at run time from the community mirror (`grcengclub.github.io/scf-api`) into `~/.cache/claude-grc/scf/<scf_version>/` and never shipped in this repo. Curated `scf_ids` were built against SCF 2026.1, and Audit Ready reads the current version from the mirror's `summary.json`.
+[claude-grc-engineering](https://github.com/GRCEngClub/claude-grc-engineering) is optional, and Audit Ready works the same without it. When it is installed:
 
-## How it works
+- **Inspector results become evidence.** `/audit-ready:collect import` files the newest `aws-`, `github-`, `gcp-`, `azure-`, `okta-` (and other) inspector runs, and flags runs older than 30 days.
+- **Gap assessments become evidence.** `/audit-ready:collect import gap` runs grc-engineer's `gap-assessment.js` (allowlisted, writing only to a staging folder) and files its requirement-level report.
+- **Failures become proposed findings.** `/audit-ready:audit` turns failing inspector checks into rated findings, with the inspector's remediation as the starting fix.
+- **Stale data is flagged.** `/audit-ready:status` shows each inspector's last run.
+- **Encrypted hand-off.** `/audit-ready:package` uses grc-engineer's `package-evidence.py`.
+- **Second opinions.** Framework plugins (`soc2`, `iso27001`, `pci-dss`, `gdpr`, `ind-dpdpa`, ...) are offered as cross-checks during scoping and planning.
 
+The two plugins meet on SCF control ids:
+
+```text
+inspector Finding v1  →  evaluations[].control_id (SCF, e.g. MON-01.4)
+                      →  catalog rows whose scf_ids contain it
+                      →  requirements in applicability.csv (e.g. soc2:CC7.2, iso27001:A.8.15)
 ```
-1. Scoping            2. Evidence collection          3. Internal audit
-/audit-ready:scope -> /audit-ready:evidence-plan  ->  /audit-ready:audit <function>
-                      /audit-ready:collect [tool]
-                      /audit-ready:request [owner]
-                      /audit-ready:inbox
-                      /audit-ready:collect import      (claude-grc-engineering)
-                                                       /audit-ready:package <fpr>
-```
 
-| Command | Pillar | What it does |
-|---|---|---|
-| `/audit-ready:start` | All | Sets up `compliance/` (never overwrites), adds evidence to `.gitignore`, shows status |
-| `/audit-ready:scope <url>` | Scoping | Reads the website (every fact sourced), asks at most 5 questions at a time, recommends frameworks and TSC categories, drafts the Statement of Applicability and the scoping memo |
-| `/audit-ready:evidence-plan` | Collection | Builds a tool-specific evidence plan from the approved scope, deduplicated across frameworks |
-| `/audit-ready:collect [tool]` | Collection | Runs read-only `gh`, `aws`, `gam`, `gcloud` and `az` playbooks after you approve each command; saves raw output, redacts secrets, hashes it (SHA-256) and indexes it. `import` files claude-grc-engineering inspector runs and gap reports |
-| `/audit-ready:request [owner]` | Collection | Drafts one evidence request per owner. Nothing is sent unless you ask |
-| `/audit-ready:inbox` | Collection | Checks, renames, hashes and files what owners dropped into `_inbox/`, and flags mismatches |
-| `/audit-ready:audit [function]` | Internal audit | Audits Engineering, IT, HR, Legal or Leadership like an external auditor would: inquiry, inspection and sample testing. It proposes verdicts and rated findings, then writes the report |
-| `/audit-ready:package <fingerprint>` | Hand-off | Verifies every hash, then builds one GPG-encrypted evidence bundle with a SHA-256 manifest for the auditor. Uses claude-grc-engineering's packager when installed. Nothing is sent |
-| `/audit-ready:status` | All | Readiness per framework computed from the CSVs, plus the top open items and the next step |
+## Your working files
 
-## Working files
-
-```
+```text
 compliance/
   profile.md               business profile, every fact with a source
   scope.md                 scoping memo: frameworks chosen and why
   applicability.csv        Statement of Applicability
   evidence-plan.csv        evidence item, requirements, method, owner, due, status
+  catalogs/                generated catalogs for SCF-backed frameworks
   evidence/
     _inbox/                owners drop files here
     index.csv              file, type, requirements, source, command, period, collected_at, sha256, redacted
-    <requirement-id>/      filed artifacts
+    <framework>_<req_id>/  filed artifacts
   requests/<owner>.md      drafted evidence requests
   audit/
     assessments.csv        evidence, requirement, verdict, gaps, fix, reviewer, date, approved
@@ -93,38 +168,66 @@ compliance/
     <date>-internal-audit-report.md
 ```
 
-The CSV columns are fixed by templates. Readiness is always computed from `applicability.csv` and `assessments.csv`, never typed in by hand.
+The CSV columns are fixed by templates. Readiness is always computed from `applicability.csv` and `assessments.csv`, never typed in. A requirement scores only as well as its weakest in-scope system.
+
+## Safety and trust
+
+- **Read-only.** Playbooks contain only get, list and describe commands. An allowlist and a secret-returning denylist enforce this, and CI checks every playbook command. Claude shows every command and waits for your approval.
+- **No secrets.** Credentials come from your existing CLI sign-ins, never from chat. Tokens and keys are redacted before a file is saved, and you are told when that happens.
+- **Nothing leaves your machine.** Requests are drafted, not sent. The evidence package is written locally, and you deliver it.
+- **Personal data.** `compliance/evidence/`, `compliance/audit/` and `compliance/catalogs/` are git-ignored on start. Reports refer to people by role or count.
+- **Integrity.** Every artifact gets a SHA-256 in `index.csv` with the exact command and collection time. The audit fails altered evidence, and the package refuses it.
+- **Honest output.** Catalog text paraphrases official ids and never reproduces the standards. Reports are readiness assessments, not certification or legal advice.
 
 ## What's inside
 
 | Part | Contents |
 |---|---|
-| Skills | `grc-assistant` (rules, folder format, templates, hashing, redaction, readiness formula), `business-discovery`, `framework-reference` (registry of 252 frameworks; 13 curated catalogs with 677 requirements; SCF-backed catalogs generated on demand), `evidence-playbooks` (gh, aws, gam, gcloud, az, each row tagged with SCF ids), `internal-audit-method` (rubric, sampling, severity, report) |
-| Agents | `site-researcher`, `evidence-reviewer`, `internal-auditor` |
-| Examples | `examples/acme-saas` (a complete sample folder), plus scoping test briefs with expected outcomes: `kirana-pay`, `ledgerloop`, `carecadence` |
-| Tests | `tests/validate_repo.py`, `tests/check_scope_result.py`, CI in `.github/workflows/validate.yml` |
+| [Commands](plugins/audit-ready/commands/) | `start`, `scope`, `evidence-plan`, `collect`, `request`, `inbox`, `audit`, `status`, `package` |
+| [Skills](plugins/audit-ready/skills/) | `grc-assistant` (rules, templates, hashing, redaction, readiness), `business-discovery` (website reading, question bank, signal to scope), `framework-reference` (registry of 252 frameworks, 13 curated catalogs, SCF generator), `evidence-playbooks` (77 read-only CLI rows across gh, aws, gam, gcloud, az), `internal-audit-method` (rubric, sampling, severity, report) |
+| [Agents](plugins/audit-ready/agents/) | `site-researcher`, `evidence-reviewer`, `internal-auditor` |
+| [Examples](examples/) | `acme-saas` (a complete sample folder), plus scoping briefs with expected outcomes: `kirana-pay`, `ledgerloop`, `carecadence` |
+| [Tests](tests/) | Static repo checks, a scoping-result checker, fixtures, and a manual end-to-end test plan |
 
-## Safety and trust
+## Documentation
 
-- **Read-only.** Playbooks contain only get, list and describe commands, enforced by an allowlist. Claude shows every command and waits for your approval before running it.
-- **No secrets.** Credentials come from your existing CLI sign-ins, never from chat. Tokens and keys are redacted before a file is saved, and you are told when that happens.
-- **Personal data.** `compliance/evidence/` and `compliance/audit/` are git-ignored on start. Reports refer to people by role or count.
-- **Integrity.** Every artifact gets a SHA-256 in `index.csv`, together with the exact command and the time it was collected.
-- **Honest output.** Catalog text is a short paraphrase keyed to official ids, not the text of the standards. Reports are readiness assessments, not certification or legal advice. DPDP Rules commencement dates and edge cases should be confirmed with counsel.
+- [CHANGELOG.md](CHANGELOG.md): what changed in each release, including schema changes
+- [tests/e2e-test-plan.md](tests/e2e-test-plan.md): step-by-step manual test of every command
+- [tests/README.md](tests/README.md): automated checks and the scoping test
+- [docs/framework-expansion-plan.md](docs/framework-expansion-plan.md): how the curated and SCF-backed tiers were designed
+- [docs/reviews/india-catalogs-2026-11.md](docs/reviews/india-catalogs-2026-11.md): source check of the CERT-In, RBI and SEBI catalogs
+- [scf.md](plugins/audit-ready/skills/framework-reference/scf.md): SCF data source, licence, generator and known data issues
 
-## Out of scope (v1)
+## Roadmap
 
-Risk register and vendor management modules, policy writing, remediation tracking, an auditor portal, continuous monitoring, and any hosted service. The P1 and P2 roadmap includes Jira, Freshservice and HRMS playbooks, and an automated leaver check.
+- Rebase the RBI catalog onto the 2025 and 2026 entity-specific directions, and add the India obligations that have no row yet.
+- Jira, Freshservice and HRMS playbooks.
+- An automated leaver check: HR leavers list against account removals.
 
-## Development
+**Out of scope for v1:** risk register and vendor management modules, policy writing, remediation tracking beyond `findings.csv`, an auditor portal, continuous monitoring, and any hosted service.
+
+## Contributing
+
+Contributions from GRC practitioners, auditors and security engineers are welcome. The most useful are:
+
+- **Catalog corrections** with a citation to the official source.
+- **New playbook rows.** They must be read-only; the validator rejects write verbs, write flags and secret-returning commands.
+- **New curated catalogs.** Add the CSV, register it in `CURATED` in `tools/build_scf_data.py` and `EXPECTED_ROWS` in `tests/validate_repo.py`, then update the tables in `framework-reference/SKILL.md`.
+- **Example briefs** with an `expected.csv`, so scoping can be tested.
+
+Before opening a pull request:
 
 ```bash
-claude plugin validate .                       # marketplace + plugin manifests
-python tests/validate_repo.py                  # catalogs, read-only playbook allowlist, examples (stdlib only)
-python tools/build_scf_data.py --check         # registry + curated scf_ids are up to date with the SCF cache
-npx markdownlint-cli2 "**/*.md"                # same lint rules as claude-grc-engineering
+claude plugin validate .                       # marketplace and plugin manifests
+python tests/validate_repo.py                  # catalogs, read-only allowlist, examples, fixtures (stdlib only)
+python tools/build_scf_data.py --check         # registry and curated scf_ids match the SCF cache
+npx markdownlint-cli2 "**/*.md"                # same rules as claude-grc-engineering
 ```
+
+## Status
+
+Pre-1.0 (currently 0.3.0). The `compliance/` CSV columns are versioned, and every change to them is listed in the [CHANGELOG](CHANGELOG.md).
 
 ## License
 
-MIT. Its layout and conventions follow claude-grc-engineering (MIT, GRC Engineering Club contributors).
+MIT. The layout and conventions follow [claude-grc-engineering](https://github.com/GRCEngClub/claude-grc-engineering) (MIT, GRC Engineering Club contributors). SCF data is licensed CC BY-ND 4.0 by the Secure Controls Framework Council; it is downloaded at run time and never redistributed here.
